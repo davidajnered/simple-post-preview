@@ -4,7 +4,7 @@ Donate link: http://www.davidajnered.com/
 Tags: simple, post, preview 
 Requires at least: N/A
 Tested up to: 3.0.1
-Stable tag: 0.1
+Stable tag: 1.0
 
 Simple Post Preview is a multi-instance widget that displays (a part of) the latest post in a category.
 
