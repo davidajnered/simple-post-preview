@@ -6,7 +6,7 @@ Requires at least: N/A
 Tested up to: 3.0.1
 Stable tag: 1.0
 
-Simple Post Preview is a multi-instance widget that displays (a part of) the latest post in a category.
+Simple Post Preview is a multi-instance widget that displays (a part of) the latest post from a category.
 
 == Description ==
 
@@ -31,10 +31,10 @@ the directory of the stable readme.txt, so in this case, `/tags/4.3/screenshot-1
 
 == Changelog ==
 
-= 01 =
+= 1.0 =
 First version of Simple Post Preview. Nothing has changed...
 
 == Upgrade Notice ==
 
-= 01 =
+= 1.0 =
 N/A

@@ -3,7 +3,7 @@
  * Plugin Name: Simple Post Preview
  * Version: 1.0
  * Plugin URI: http://www.davidajnered.com/
- * Description: Simple Post Preview is a widget that displays (a part of) the latest post in a category.
+ * Description: Simple Post Preview is a widget that displays (a part of) the latest post from a category.
  * Author: David Ajnered
  */
  
