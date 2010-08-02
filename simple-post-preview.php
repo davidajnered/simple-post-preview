@@ -118,7 +118,7 @@ class simple_post_preview extends WP_Widget
              value="<?php echo $header; ?>"/>
       </p>
       
-      <p><label for="<?php echo $this->get_field_name('category'); ?>"><?php echo __('Select Category:'); ?></label><br>
+      <p><label for="<?php echo $this->get_field_name('category'); ?>"><?php echo __('Select category:'); ?></label><br>
       <select name="<?php echo $this->get_field_name('category'); ?>" 
               id="<?php echo $this->get_field_id('category'); ?>" 
               style="width:170px">

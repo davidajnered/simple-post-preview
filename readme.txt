@@ -2,7 +2,7 @@
 Contributors: davidajnered
 Donate link: http://www.davidajnered.com/
 Tags: simple, post, preview 
-Requires at least: N/A
+Requires at least:
 Tested up to: 3.0.1
 Stable tag: 1.0
 
@@ -10,7 +10,7 @@ Simple Post Preview is a multi-instance widget that displays (a part of) the lat
 
 == Description ==
 
-Simple Post Preview let you display the latest post in a category. It's as simple as activating the plugin, adding it to a widget area and setting it up the way you like.
+This widget lets you display the latest post from a category. It's as simple as activating the plugin, adding it to a widget area and setting it up.
 
 == Installation ==
 
@@ -19,9 +19,14 @@ Simple Post Preview let you display the latest post in a category. It's as simpl
 3. Use the plugin by placing it in any defined widget area
 4. Setup Simple Post Preview so that is displays what you want
 
-== Frequently Asked Questions ==
+There aren't many ways to set it up, but here is a walkthrough
+Header: You can choose to write a header. If you don't, the title of the post will be used as the header instead
+Select Category: Select one of your categories from which you want to display the latest post
+Length of preview: The number of characters from the post shown in the preview 
+Link name: The name of the link that takes you to the full post
+Link to: You can choose to link to either the post or the category
 
-N/A
+== Frequently Asked Questions ==
 
 == Screenshots ==
 
