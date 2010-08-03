@@ -1,10 +1,10 @@
 === Simple Post Preview ===
 Contributors: davidajnered
 Donate link: http://www.davidajnered.com/
-Tags: simple, post, preview 
+Tags: simple, post, preview, category, pushes
 Requires at least:
 Tested up to: 3.0.1
-Stable tag: 1.0
+Stable tag: 1.0.1
 
 Simple Post Preview is a multi-instance widget that displays (a part of) the latest post from a category.
 
@@ -35,9 +35,13 @@ Link to: You can choose to link to either the post or the category
 == Changelog ==
 
 = 1.0 =
-First version of Simple Post Preview. Nothing has changed...
+* First version of Simple Post Preview
+
+= 1.0.1 =
+* Fixed a bug that made the widget show a post from another category than the one selected
+* It's no longer possible to select an empty category
 
 == Upgrade Notice ==
 
-= 1.0 =
-N/A
+= 1.0.1 =
+This upgrade fixes an incorrect database query that made the widget show posts from the wrong category
