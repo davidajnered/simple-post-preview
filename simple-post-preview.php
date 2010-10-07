@@ -31,7 +31,7 @@ class simple_post_preview extends WP_Widget
       $header = $instance['header'];
       $length = (int)$instance['length'];
       $category = (int)$instance['category'];
-      $link = $instance['link'];
+      $ellipsis = $instance['ellipsis'];
       $link_to = $instance['link_to'];
 
       $data = $wpdb->get_results(
@@ -60,9 +60,9 @@ class simple_post_preview extends WP_Widget
     /* Set link url, post is default */
     $data = $data[0];
     if($link_to == 'Category') {
-      $html_link = '<a href="'.get_bloginfo('url').'?cat='.$data->term_taxonomy_id.'">'.$link.'</a>';
+      $html_link = '<a href="'.get_bloginfo('url').'?cat='.$data->term_taxonomy_id.'">'.$ellipsis.'</a>';
     } else {
-      $html_link = '<a href="'.get_bloginfo('url').'?p='.$data->ID.'">'.$link.'</a>';
+      $html_link = '<a href="'.get_bloginfo('url').'?p='.$data->ID.'">'.$ellipsis.'</a>';
     }
 
     /* Print to view */
@@ -93,7 +93,7 @@ class simple_post_preview extends WP_Widget
     $instance['header'] = strip_tags(stripslashes($new_instance['header']));
     $instance['category'] = strip_tags(stripslashes($new_instance['category']));
     $instance['length'] = strip_tags(stripslashes($new_instance['length']));
-    $instance['link'] = strip_tags(stripslashes($new_instance['link']));
+    $instance['ellipsis'] = strip_tags(stripslashes($new_instance['ellipsis']));
     $instance['link_to'] = strip_tags(stripslashes($new_instance['link_to']));
     return $instance;
   }
@@ -107,7 +107,7 @@ class simple_post_preview extends WP_Widget
     $header = htmlspecialchars($instance['header']);
     $category = htmlspecialchars($instance['category']);
     $length = htmlspecialchars($instance['length']);
-    $link = htmlspecialchars($instance['link']);
+    $ellipsis = htmlspecialchars($instance['ellipsis']);
     $link_to = htmlspecialchars($instance['link_to']);
     ?>
 
@@ -138,6 +138,23 @@ class simple_post_preview extends WP_Widget
       </select></p>
 
       <p>
+      <label for="<?php echo $this->get_field_name('Thumbnail'); ?>"><?php echo __('Thumbnail:'); ?></label><br>
+      <input id="<?php echo $this->get_field_id('thumbnail') ?>"
+             name="<?php echo $this->get_field_name('thumbnail'); ?>"
+             type="checkbox"
+             value="<?php echo $thumbnail; ?>"/>
+      Show thumbnail in preview
+      </p>
+
+      <p>
+        Thumbnail size:
+      <input id="<?php echo $this->get_field_id('thumbnail_size') ?>"
+             name="<?php echo $this->get_field_name('thumbnail_size'); ?>"
+             type="text"
+             value="<?php echo $thumbnail_size; ?>"/>
+      </p>
+
+      <p>
       <label for="<?php echo $this->get_field_name('length'); ?>"><?php echo __('Length of preview:'); ?></label><br>
       <input id="<?php echo $this->get_field_id('length'); ?>"
              name="<?php echo $this->get_field_name('length'); ?>"
@@ -146,11 +163,11 @@ class simple_post_preview extends WP_Widget
       </p>
 
       <p>
-      <label for="<?php echo $this->get_field_name('link'); ?>"><?php echo __('Link name:'); ?></label><br>
-      <input id="<?php echo $this->get_field_id('link'); ?>"
-             name="<?php echo $this->get_field_name('link'); ?>"
+      <label for="<?php echo $this->get_field_name('ellipsis'); ?>"><?php echo __('Ellipsis:'); ?></label><br>
+      <input id="<?php echo $this->get_field_id('ellipsis'); ?>"
+             name="<?php echo $this->get_field_name('ellipsis'); ?>"
              type="text"
-             value="<?php echo $link; ?>" />
+             value="<?php echo $ellipsis; ?>" />
       </p>
 
       <p><label for="<?php echo $this->get_field_name('link_to'); ?>"><?php echo __('Link to:'); ?></label><br>
@@ -174,6 +191,11 @@ function simple_post_preview_init() {
   register_widget('simple_post_preview');
 }
 
+function add_css() {
+  print '<link rel="stylesheet" type="text/css" href="/css/simple-post-preview.css" />';
+}
+
+add_action('wp_head', 'add_css');
 add_action('widgets_init', 'simple_post_preview_init');
 
 ?>
