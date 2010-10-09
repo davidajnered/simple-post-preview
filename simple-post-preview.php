@@ -21,7 +21,7 @@ class simple_post_preview extends WP_Widget
  /*
   * Displays the widget
   */
-  function widget($args, $instance){
+  function widget($args, $instance) {
     $data;
     $header;
 
@@ -31,6 +31,8 @@ class simple_post_preview extends WP_Widget
       $header = $instance['header'];
       $length = (int)$instance['length'];
       $category = (int)$instance['category'];
+      $thumbnail = $instance['thumbnail'];
+      $thumbnail_size = $instance['thumbnail_size'];
       $ellipsis = $instance['ellipsis'];
       $link_to = $instance['link_to'];
 
@@ -51,7 +53,7 @@ class simple_post_preview extends WP_Widget
       $header = "Error!";
       $data = array(
         (object) array(
-          'post_title' => 'Oh No!',
+          'post_title' => 'Error!',
           'post_content' => 'This widget needs configuration'
         )
       );
@@ -92,6 +94,9 @@ class simple_post_preview extends WP_Widget
     $instance = $old_instance;
     $instance['header'] = strip_tags(stripslashes($new_instance['header']));
     $instance['category'] = strip_tags(stripslashes($new_instance['category']));
+    $thumb = strip_tags(stripslashes($new_instance['thumbnail']));
+    $instance['thumbnail'] = $thumb != 'checked' ? FALSE : TRUE;
+    $instance['thumbnail_size'] = strip_tags(stripslashes($new_instance['thumbnail_size']));
     $instance['length'] = strip_tags(stripslashes($new_instance['length']));
     $instance['ellipsis'] = strip_tags(stripslashes($new_instance['ellipsis']));
     $instance['link_to'] = strip_tags(stripslashes($new_instance['link_to']));
@@ -106,6 +111,8 @@ class simple_post_preview extends WP_Widget
 
     $header = htmlspecialchars($instance['header']);
     $category = htmlspecialchars($instance['category']);
+    $thumbnail = htmlspecialchars($instance['thumbnail']);
+    $thumbnail_size = htmlspecialchars($instance['thumbnail_size']);
     $length = htmlspecialchars($instance['length']);
     $ellipsis = htmlspecialchars($instance['ellipsis']);
     $link_to = htmlspecialchars($instance['link_to']);
@@ -138,11 +145,12 @@ class simple_post_preview extends WP_Widget
       </select></p>
 
       <p>
-      <label for="<?php echo $this->get_field_name('Thumbnail'); ?>"><?php echo __('Thumbnail:'); ?></label><br>
+      <label for="<?php echo $this->get_field_name('thumbnail'); ?>"><?php echo __('Thumbnail:'); ?></label><br>
       <input id="<?php echo $this->get_field_id('thumbnail') ?>"
              name="<?php echo $this->get_field_name('thumbnail'); ?>"
              type="checkbox"
-             value="<?php echo $thumbnail; ?>"/>
+             value="checked"
+             <?php echo $thumbnail ? 'checked': ''; ?>>
       Show thumbnail in preview
       </p>
 
