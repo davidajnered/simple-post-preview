@@ -78,8 +78,19 @@ class simple_post_preview extends WP_Widget
     <?php endif; ?>
 
     <p>
+      <?php if($thumbnail == TRUE) {
+        echo get_the_post_thumbnail($data->ID, $thumbnail_size);
+      } ?>
+
       <?php $content = strip_tags($data->post_content);
-      echo (strlen($content) > $length) ? (substr($content, 0, $length).'&hellip; ') : $content; ?>
+      if(strlen($content) > $length) {
+        if($length > 0) {
+          $content = substr($content, 0, $length).'&hellip; ';
+        } else {
+          $content = '';
+        }
+      }
+      print $content; ?>
     </p>
     <p><?php echo $html_link ?></p>
     <?php echo $args['after_widget']; ?>
