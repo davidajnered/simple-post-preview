@@ -66,36 +66,8 @@ class simple_post_preview extends WP_Widget
     } else {
       $html_link = '<a href="'.get_bloginfo('url').'?p='.$data->ID.'">'.$ellipsis.'</a>';
     }
-
     /* Print to view */
-    ?>
-    <?php echo $args['before_widget']; ?>
-    <?php if($header != null) : ?>
-      <?php echo $args['before_title']; ?><?php echo $header; ?><?php echo $args['after_title']; ?>
-      <p class="sub-header"><?php echo $data->post_title; ?></p>
-    <?php else : ?>
-      <?php echo $args['before_title']; ?><?php echo $data->post_title; ?><?php echo $args['after_title']; ?>
-    <?php endif; ?>
-
-    <p>
-      <?php if($thumbnail == TRUE) {
-        echo get_the_post_thumbnail($data->ID, $thumbnail_size);
-      } ?>
-
-      <?php $content = strip_tags($data->post_content);
-      if(strlen($content) > $length) {
-        if($length > 0) {
-          $content = substr($content, 0, $length).'&hellip; ';
-        } else {
-          $content = '';
-        }
-      }
-      print $content; ?>
-    </p>
-    <p><?php echo $html_link ?></p>
-    <?php echo $args['after_widget']; ?>
-
-    <?php
+    require_once('includes/view.php');
   }
 
  /**
@@ -127,79 +99,8 @@ class simple_post_preview extends WP_Widget
     $length = htmlspecialchars($instance['length']);
     $ellipsis = htmlspecialchars($instance['ellipsis']);
     $link_to = htmlspecialchars($instance['link_to']);
-    ?>
 
-      <p>
-      <label for="<?php echo $this->get_field_name('header'); ?>"><?php echo __('Header:') ?></label><br>
-      <input id="<?php echo $this->get_field_id('header') ?>"
-             name="<?php echo $this->get_field_name('header'); ?>"
-             type="text"
-             value="<?php echo $header; ?>"/>
-      </p>
-
-      <p><label for="<?php echo $this->get_field_name('category'); ?>"><?php echo __('Select category:'); ?></label><br>
-      <select name="<?php echo $this->get_field_name('category'); ?>"
-              id="<?php echo $this->get_field_id('category'); ?>"
-              style="width:170px">
-      <?php $result = $wpdb->get_results(
-        "SELECT {$wpdb->terms}.term_id, name FROM {$wpdb->terms}
-         LEFT JOIN {$wpdb->term_taxonomy}
-         ON {$wpdb->term_taxonomy}.term_id = {$wpdb->terms}.term_id
-         WHERE {$wpdb->term_taxonomy}.taxonomy = 'category'
-         AND {$wpdb->term_taxonomy}.count > 0;"
-      );
-      foreach($result as $category) : ?>
-        <option <?php echo ($category->term_id == $instance['category']) ? 'selected' : '' ?> value="<?php echo $category->term_id; ?>">
-          <?php echo $category->name; ?>
-        </option>
-      <?php endforeach; ?>
-      </select></p>
-
-      <p>
-      <label for="<?php echo $this->get_field_name('thumbnail'); ?>"><?php echo __('Thumbnail:'); ?></label><br>
-      <input id="<?php echo $this->get_field_id('thumbnail') ?>"
-             name="<?php echo $this->get_field_name('thumbnail'); ?>"
-             type="checkbox"
-             value="checked"
-             <?php echo $thumbnail ? 'checked': ''; ?>>
-      Show thumbnail in preview
-      </p>
-
-      <p>
-        Thumbnail size:
-      <input id="<?php echo $this->get_field_id('thumbnail_size') ?>"
-             name="<?php echo $this->get_field_name('thumbnail_size'); ?>"
-             type="text"
-             value="<?php echo $thumbnail_size; ?>"/>
-      </p>
-
-      <p>
-      <label for="<?php echo $this->get_field_name('length'); ?>"><?php echo __('Length of preview:'); ?></label><br>
-      <input id="<?php echo $this->get_field_id('length'); ?>"
-             name="<?php echo $this->get_field_name('length'); ?>"
-             type="text"
-             value="<?php echo $length; ?>" />
-      </p>
-
-      <p>
-      <label for="<?php echo $this->get_field_name('ellipsis'); ?>"><?php echo __('Ellipsis:'); ?></label><br>
-      <input id="<?php echo $this->get_field_id('ellipsis'); ?>"
-             name="<?php echo $this->get_field_name('ellipsis'); ?>"
-             type="text"
-             value="<?php echo $ellipsis; ?>" />
-      </p>
-
-      <p><label for="<?php echo $this->get_field_name('link_to'); ?>"><?php echo __('Link to:'); ?></label><br>
-      <select name="<?php echo $this->get_field_name('link_to'); ?>"
-              id="<?php echo $this->get_field_id('link_to'); ?>"
-              style="width:170px">
-        <?php $options = array('Post', 'Category');
-        foreach($options as $option) : ?>
-        <option value="<?php echo $option; ?>" <?php echo $option == $instance['link_to'] ? 'selected' : '' ?>><?php echo $option; ?></option>
-        <?php endforeach; ?>
-      </select></p>
-
-  <?php
+    require_once('includes/interface.php');
   }
 } /* End of class */
 
@@ -211,10 +112,10 @@ function simple_post_preview_init() {
 }
 
 function add_css() {
-  print '<link rel="stylesheet" type="text/css" href="/css/simple-post-preview.css" />';
+  print '<link rel="stylesheet" type="text/css" href="'.get_bloginfo('url').'/wp-content/plugins/simple-post-preview/css/simple-post-preview.css" />';
 }
 
-add_action('wp_head', 'add_css');
+add_action('admin_head', 'add_css');
 add_action('widgets_init', 'simple_post_preview_init');
 
 ?>
