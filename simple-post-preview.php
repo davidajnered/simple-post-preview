@@ -1,14 +1,13 @@
 <?php
 /*
  * Plugin Name: Simple Post Preview
- * Version: 1.0.1
+ * Version: 1.1.0
  * Plugin URI: http://www.davidajnered.com/
  * Description: Simple Post Preview is a widget that displays (a part of) the latest post from a category.
  * Author: David Ajnered
  */
 
-class simple_post_preview extends WP_Widget
-{
+class simple_post_preview extends WP_Widget {
 
   function simple_post_preview(){
     $widget_ops = array('classname' => 'simple_post_preview',
@@ -22,35 +21,23 @@ class simple_post_preview extends WP_Widget
   * Displays the widget
   */
   function widget($args, $instance) {
-    $data;
-    $header;
-
     if(!empty($instance)) {
       /* Variables */
-      global $wpdb;
-      $header = $instance['header'];
+      $title = $instance['title'];
       $length = (int)$instance['length'];
       $category = (int)$instance['category'];
       $thumbnail = $instance['thumbnail'];
       $thumbnail_size = $instance['thumbnail_size'];
-      $ellipsis = $instance['ellipsis'];
+      $link = $instance['link'];
       $link_to = $instance['link_to'];
 
-      $data = $wpdb->get_results(
-        "SELECT ID, post_title, post_content, post_date, post_status, guid, term_id
-         FROM {$wpdb->posts}
-         LEFT JOIN {$wpdb->term_relationships} ON object_id = ID
-         LEFT JOIN {$wpdb->term_taxonomy} ON {$wpdb->term_relationships}.term_taxonomy_id = {$wpdb->term_taxonomy}.term_taxonomy_id
-         WHERE term_id = $category
-         AND post_status = 'publish'
-         ORDER BY post_date
-         DESC LIMIT 0,1"
-      );
+      include_once('includes/db_queries.php');
+      $data = spp_get_post($category);
     }
 
     /* If database returns nothing, set default values */
     if($data == null) {
-      $header = "Error!";
+      $title = "Error!";
       $data = array(
         (object) array(
           'post_title' => 'Error!',
@@ -58,30 +45,29 @@ class simple_post_preview extends WP_Widget
         )
       );
     }
+    $data = $data[0];
 
     /* Set link url, post is default */
-    $data = $data[0];
-    if($link_to == 'Category') {
-      $html_link = '<a href="'.get_bloginfo('url').'?cat='.$data->term_taxonomy_id.'">'.$ellipsis.'</a>';
-    } else {
-      $html_link = '<a href="'.get_bloginfo('url').'?p='.$data->ID.'">'.$ellipsis.'</a>';
-    }
+    $html_link = '<a href="'.get_bloginfo('url');
+    $html_link .= ($link_to == 'Category') ? '?cat='.$data->term_id : '?p='.$data->ID;
+    $html_link .= '">'.$link.'</a>';
+
     /* Print to view */
-    require_once('includes/view.php');
+    include_once('includes/view.php');
   }
 
  /**
   * Saves the widget settings
   */
   function update($new_instance, $old_instance){
+    $thumb = strip_tags(stripslashes($new_instance['thumbnail']));    
     $instance = $old_instance;
-    $instance['header'] = strip_tags(stripslashes($new_instance['header']));
+    $instance['title'] = strip_tags(stripslashes($new_instance['title']));
     $instance['category'] = strip_tags(stripslashes($new_instance['category']));
-    $thumb = strip_tags(stripslashes($new_instance['thumbnail']));
     $instance['thumbnail'] = $thumb != 'checked' ? FALSE : TRUE;
     $instance['thumbnail_size'] = strip_tags(stripslashes($new_instance['thumbnail_size']));
     $instance['length'] = strip_tags(stripslashes($new_instance['length']));
-    $instance['ellipsis'] = strip_tags(stripslashes($new_instance['ellipsis']));
+    $instance['link'] = strip_tags(stripslashes($new_instance['link']));
     $instance['link_to'] = strip_tags(stripslashes($new_instance['link_to']));
     return $instance;
   }
@@ -90,18 +76,18 @@ class simple_post_preview extends WP_Widget
   * Form for admin
   */
   function form($instance) {
-    global $wpdb;
-
-    $header = htmlspecialchars($instance['header']);
+    $title = htmlspecialchars($instance['title']);
     $category = htmlspecialchars($instance['category']);
     $thumbnail = htmlspecialchars($instance['thumbnail']);
     $thumbnail_size = htmlspecialchars($instance['thumbnail_size']);
     $length = htmlspecialchars($instance['length']);
-    $ellipsis = htmlspecialchars($instance['ellipsis']);
+    $link = htmlspecialchars($instance['link']);
     $link_to = htmlspecialchars($instance['link_to']);
 
-    require_once('includes/interface.php');
+    /* Print interface */
+    include('includes/interface.php');
   }
+
 } /* End of class */
 
  /**
