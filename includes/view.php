@@ -1,17 +1,17 @@
-<?php echo $args['before_widget']; ?>
-<?php if($header != null) : ?>
-  <?php echo $args['before_title']; ?><?php echo $header; ?><?php echo $args['after_title']; ?>
-  <p class="sub-header"><?php echo $data->post_title; ?></p>
-<?php else : ?>
-  <?php echo $args['before_title']; ?><?php echo $data->post_title; ?><?php echo $args['after_title']; ?>
-<?php endif; ?>
+<?php
+  $output = $args['before_widget'].$args['before_title'];
+  if($title != NULL) {
+    $output .= $title;
+  } else {
+    $output .= $data->post_title;
+  }
+  $output .= $args['after_title'];
 
-<p>
-  <?php if($thumbnail == TRUE) {
-    echo get_the_post_thumbnail($data->ID, $thumbnail_size);
-  } ?>
+  if($thumbnail == TRUE) {
+    $output .= get_the_post_thumbnail($data->ID, $thumbnail_size);
+  }
 
-  <?php $content = strip_tags($data->post_content);
+  $content = strip_tags($data->post_content);
   if(strlen($content) > $length) {
     if($length > 0) {
       $content = substr($content, 0, $length).'&hellip; ';
@@ -19,7 +19,5 @@
       $content = '';
     }
   }
-  print $content; ?>
-</p>
-<p><?php echo $html_link ?></p>
-<?php echo $args['after_widget']; ?>
+  $output .= $content.$html_link.$args['after_widget'];
+  echo $output;

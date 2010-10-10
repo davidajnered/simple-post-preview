@@ -1,3 +1,8 @@
 .simple-post-preview input[type=text], .simple-post-preview select {
   width: 100%;
 }
+
+.simple-post-preview small {
+  font-size: 9px;
+  color: #777;
+}
