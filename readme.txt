@@ -14,6 +14,9 @@ This widget lets you create a push for any post you like. It can create two kind
 
 For more updated information see http://davidajnered.dev/blog/simple-post-preview/
 
+What's in the future?
+- javascript for admin UI
+
 If you have an idea for improvement feel free to send me an email. Feedback is always appreciated. If you want to add code yourself you can fork Simple Post Preview on github (https://github.com/davidajnered/simple-post-preview), add the code and send me a pull request.
 
 == Installation ==
