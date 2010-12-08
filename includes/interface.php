@@ -8,6 +8,7 @@
   <p>
     <label for="<?php echo $this->get_field_name('category'); ?>"><?php echo __('Select a category:'); ?></label><br>
     <select name="<?php echo $this->get_field_name('category'); ?>" id="<?php echo $this->get_field_id('category'); ?>">
+    <option value=""> - </option>
     <?php include_once('db_queries.php');
       foreach(spp_get_categories() as $category) : ?>
         <option <?php echo ($category->term_id == $instance['category']) ? 'selected' : '' ?> value="<?php echo $category->term_id; ?>">
@@ -18,19 +19,42 @@
   </p>
 
   <p>
-    <label for="<?php echo $this->get_field_name('thumbnail'); ?>"><?php echo __('Thumbnail:'); ?></label><br>
+    <label for="<?php echo $this->get_field_name('post'); ?>"><?php echo __('Select a post:'); ?></label><br>
+    <select name="<?php echo $this->get_field_name('post'); ?>" id="<?php echo $this->get_field_id('post'); ?>">
+    <option value=""> - </option>
+    <?php include_once('db_queries.php');
+      foreach(spp_get_all_posts() as $post) : ?>
+        <option <?php echo ($post->ID == $instance['post']) ? 'selected' : '' ?> value="<?php echo $post->ID; ?>">
+          <?php echo $post->post_title; ?>
+        </option>
+      <?php endforeach; ?>
+    </select>
+  </p>
+
+  <div class="spp-thumbnail">
+  <label>Thumbnail</label>
+  <div class="spp-thumbnail-wrapper">
+  <p>
     <input id="<?php echo $this->get_field_id('thumbnail') ?>" name="<?php echo $this->get_field_name('thumbnail'); ?>" type="checkbox" value="checked" <?php echo $thumbnail ? 'checked': ''; ?>>
-    Show thumbnail in preview
+    Show thumbnail in push
   </p>
 
   <p>
-    Thumbnail size:
-    <input id="<?php echo $this->get_field_id('thumbnail_size') ?>" name="<?php echo $this->get_field_name('thumbnail_size'); ?>" type="text" value="<?php echo $thumbnail_size; ?>"/>
-    <small>The name of the thumbnail size specified in functions.php</small>
+    <label for="<?php echo $this->get_field_name('thumbnail_size'); ?>"><?php echo __('Select thumbnail size:'); ?></label><br>
+    <select name="<?php echo $this->get_field_name('thumbnail_size'); ?>" id="<?php echo $this->get_field_id('thumbnail_size'); ?>">
+    <?php include_once('db_queries.php');
+      foreach(spp_get_thumbnail_sizes() as $name => $desc) : ?>
+        <option <?php echo ($name == $instance['thumbnail_size']) ? 'selected' : '' ?> value="<?php echo $name; ?>">
+          <?php echo $desc; ?>
+        </option>
+      <?php endforeach; ?>
+    </select>
   </p>
+  </div>
+</div>
 
   <p>
-    <label for="<?php echo $this->get_field_name('length'); ?>"><?php echo __('Length of preview:'); ?></label><br>
+    <label for="<?php echo $this->get_field_name('length'); ?>"><?php echo __('Length of excerpt:'); ?></label><br>
     <input id="<?php echo $this->get_field_id('length'); ?>" name="<?php echo $this->get_field_name('length'); ?>" type="text" value="<?php echo $length; ?>" />
   </p>
 

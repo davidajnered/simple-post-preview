@@ -22,37 +22,42 @@ class simple_post_preview extends WP_Widget {
   */
   function widget($args, $instance) {
     if(!empty($instance)) {
-      /* Variables */
+      // Variables
       $title = $instance['title'];
       $length = (int)$instance['length'];
       $category = (int)$instance['category'];
+      $post = (int)$instance['post'];
       $thumbnail = $instance['thumbnail'];
       $thumbnail_size = $instance['thumbnail_size'];
       $link = $instance['link'];
       $link_to = $instance['link_to'];
 
       include_once('includes/db_queries.php');
-      $data = spp_get_post($category);
-    }
-
-    /* If database returns nothing, set default values */
-    if($data == null) {
-      $title = "Error!";
-      $data = array(
-        (object) array(
+      if($category != 0) {
+        $data = spp_get_post('category', $category);
+        $data = $data[0];
+      } else if($post != 0) {
+        $data = spp_get_post('post', $post);
+        $data = $data[0];
+      } else {
+        // If database returns nothing, set default values
+        $title = "Simple Post Preview";
+        $length = 100;
+        $data = (object)array(
           'post_title' => 'Error!',
-          'post_content' => 'This widget needs configuration'
-        )
-      );
+          'post_content' => 'This widget needs configuration',
+        );
+      }
     }
-    $data = $data[0];
 
-    /* Set link url, post is default */
-    $html_link = '<a href="'.get_bloginfo('url');
-    $html_link .= ($link_to == 'Category') ? '?cat='.$data->term_id : '?p='.$data->ID;
-    $html_link .= '">'.$link.'</a>';
+    if($data != NULL) {
+      // Set link url, post is default
+      $html_link = '<a href="'.get_bloginfo('url');
+      $html_link .= ($link_to == 'Category') ? '?cat='.$data->term_id : '?p='.$data->ID;
+      $html_link .= '">'.$link.'</a>';
+    }
 
-    /* Print to view */
+    //Print to view
     include_once('includes/view.php');
   }
 
@@ -60,15 +65,17 @@ class simple_post_preview extends WP_Widget {
   * Saves the widget settings
   */
   function update($new_instance, $old_instance){
-    $thumb = strip_tags(stripslashes($new_instance['thumbnail']));    
+    $thumb = strip_tags(stripslashes($new_instance['thumbnail']));
     $instance = $old_instance;
     $instance['title'] = strip_tags(stripslashes($new_instance['title']));
     $instance['category'] = strip_tags(stripslashes($new_instance['category']));
+    $instance['post'] = strip_tags(stripslashes($new_instance['post']));
     $instance['thumbnail'] = $thumb != 'checked' ? FALSE : TRUE;
     $instance['thumbnail_size'] = strip_tags(stripslashes($new_instance['thumbnail_size']));
     $instance['length'] = strip_tags(stripslashes($new_instance['length']));
     $instance['link'] = strip_tags(stripslashes($new_instance['link']));
     $instance['link_to'] = strip_tags(stripslashes($new_instance['link_to']));
+
     return $instance;
   }
 
@@ -78,6 +85,7 @@ class simple_post_preview extends WP_Widget {
   function form($instance) {
     $title = htmlspecialchars($instance['title']);
     $category = htmlspecialchars($instance['category']);
+    $post = htmlspecialchars($instance['post']);
     $thumbnail = htmlspecialchars($instance['thumbnail']);
     $thumbnail_size = htmlspecialchars($instance['thumbnail_size']);
     $length = htmlspecialchars($instance['length']);
@@ -96,12 +104,12 @@ class simple_post_preview extends WP_Widget {
 function simple_post_preview_init() {
   register_widget('simple_post_preview');
 }
-
-function add_css() {
-  print '<link rel="stylesheet" type="text/css" href="'.get_bloginfo('url').'/wp-content/plugins/simple-post-preview/css/simple-post-preview.css" />';
-}
-
-add_action('admin_head', 'add_css');
 add_action('widgets_init', 'simple_post_preview_init');
+
+function simple_post_preview_head() {
+  echo '<link rel="stylesheet" type="text/css" href="'.get_bloginfo('url').'/wp-content/plugins/simple-post-preview/css/simple-post-preview.css" />';
+  echo '<script type="text/javascript" src="'.get_bloginfo('url').'/wp-content/plugins/simple-post-preview/js/simple-post-preview.js"></script>';
+}
+add_action('admin_head', 'simple_post_preview_head');
 
 ?>
