@@ -12,12 +12,12 @@ Simple Post Preview is a multi-instance widget that creates a push for the lates
 
 This widget lets you create a push for any post you like. It can create two kinds of pushes, both dynamic and static ones. A dynamic push is a push that shows the latest post from a category you select. It will automatically update it for you. To create a dymanic push simply select a category from the category drop down.To create a static push you select the post you want to show from the post drop down instead. This push will never change unless you reconfigure the widget.
 
-For more updated information see http://davidajnered.dev/blog/simple-post-preview/
+For more updated information see http://davidajnered.dev/simple-post-preview/
 
 What's in the future?
 - javascript for admin UI
 
-If you have an idea for improvement feel free to send me an email. Feedback is always appreciated. If you want to add code yourself you can fork Simple Post Preview on github (https://github.com/davidajnered/simple-post-preview), add the code and send me a pull request.
+If you have an idea for improvement feel free to send me an email at davidajnered@gmail.com. Feedback is always appreciated. If you want to add some code yourself you can fork Simple Post Preview on github (https://github.com/davidajnered/simple-post-preview). Make your change and send me a pull request.
 
 == Installation ==
 

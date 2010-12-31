@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Get allt posts from the db
+ */
 function spp_get_all_posts() {
   global $wpdb;
   $query =
@@ -10,14 +13,10 @@ function spp_get_all_posts() {
      LEFT JOIN {$wpdb->term_taxonomy}
      ON {$wpdb->term_relationships}.term_taxonomy_id = {$wpdb->term_taxonomy}.term_taxonomy_id
      WHERE post_status = 'publish'
-     ORDER BY post_date
-     DESC LIMIT 1;";
-
-    /*"SELECT ID, post_title
-     FROM wp_posts
-     WHERE post_status = 'publish'
      AND post_type = 'post'
-     ORDER BY post_date";*/
+     GROUP BY ID
+     ORDER BY post_date
+     ;";
   $data = $wpdb->get_results($query);
   return $data;
 }
@@ -58,6 +57,9 @@ function spp_get_post($type, $selector) {
   return $data;
 }
 
+/**
+ * Get all categories
+ */
 function spp_get_categories() {
   global $wpdb;
   $categories = $wpdb->get_results(
