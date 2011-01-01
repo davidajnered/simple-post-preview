@@ -3,7 +3,7 @@ Contributors: davidajnered
 Donate link: http://www.davidajnered.com/
 Tags: simple, post, preview, category, push, widget, promote, excerpt
 Requires at least:
-Tested up to: 3.0.1
+Tested up to: 3.0.4
 Stable tag: 1.2.0
 
 Simple Post Preview is a multi-instance widget that creates a push for the latest post in a category.
