@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Get allt posts from the db
+ * Get all posts or all posts from a category
  */
-function spp_get_all_posts() {
+function spp_get_all_posts($category = NULL) {
   global $wpdb;
   $query =
     "SELECT ID, post_title, post_content, post_date, post_status, guid, term_id
@@ -12,8 +12,11 @@ function spp_get_all_posts() {
      ON object_id = ID
      LEFT JOIN {$wpdb->term_taxonomy}
      ON {$wpdb->term_relationships}.term_taxonomy_id = {$wpdb->term_taxonomy}.term_taxonomy_id
-     WHERE post_status = 'publish'
-     AND post_type = 'post'
+     WHERE post_status = 'publish'";
+     if($category != NULL) {
+       $query .= " AND {$wpdb->term_taxonomy}.term_id = " . $category;
+     }
+     $query .= " AND post_type = 'post'
      GROUP BY ID
      ORDER BY post_date
      ;";
@@ -21,8 +24,10 @@ function spp_get_all_posts() {
   return $data;
 }
 
+
+
 /**
- * Selects the latest post from a category
+ * Select a specific post or the latest post from a category
  */
 function spp_get_post($type, $selector) {
   global $wpdb;
@@ -72,7 +77,7 @@ function spp_get_categories() {
   return $categories;
 }
 
-/*
+/**
  * Get all available thumbnail sizes
  * Retreived the data from the last uploaded picture.
  */
@@ -84,9 +89,34 @@ function spp_get_thumbnail_sizes() {
      AND post_id = (SELECT max(post_id) FROM {$wpdb->postmeta});"
   );
   $data = unserialize($data[0]->meta_value);
-  foreach($data['sizes'] as $key => $values) {
-    $options[$key] = $key . ' [H:'.$values['height'].'px W:'.$values['width'].'px]';
+  if($data != FALSE) {
+    foreach($data['sizes'] as $key => $values) {
+      $options[$key] = $key . ' [H:'.$values['height'].'px W:'.$values['width'].'px]';
+    }
+    ksort($options);
+  } else {
+    $options = array();
   }
-  ksort($options);
   return $options;
+}
+
+/**
+ *
+ */
+function spp_get_cat_post_hierarki() {
+  $categories = spp_get_categories();
+  $i = 0;
+  foreach($categories as $category) {
+    $posts = spp_get_all_posts($category->term_id);
+    $select[$i]['category_name'] = $category->name;
+    $select[$i]['category_id'] = $category->term_id;
+    $j = 0;
+    foreach($posts as $post) {
+      $select[$i]['children'][$j]['post_name'] = $post->post_title;
+      $select[$i]['children'][$j]['post_id'] = $post->ID;
+      $j++;
+    }
+    $i++;
+  }
+  return $select;
 }

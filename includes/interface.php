@@ -1,3 +1,5 @@
+<?php include_once('db_queries.php'); ?>
+
 <div class="simple-post-preview">
   <p>
     <label for="<?php echo $this->get_field_name('title'); ?>"><?php echo __('Title:') ?></label><br>
@@ -6,27 +8,20 @@
   </p>
 
   <p>
-    <label for="<?php echo $this->get_field_name('category'); ?>"><?php echo __('Select a category:'); ?></label><br>
-    <select name="<?php echo $this->get_field_name('category'); ?>" id="<?php echo $this->get_field_id('category'); ?>">
-    <option value=""> - </option>
-    <?php include_once('db_queries.php');
-      foreach(spp_get_categories() as $category) : ?>
-        <option <?php echo ($category->term_id == $instance['category']) ? 'selected' : '' ?> value="<?php echo $category->term_id; ?>">
-          <?php echo $category->name; ?>
+    <label for="<?php echo $this->get_field_name('item'); ?>"><?php echo __('Select a post or a category:'); ?></label><br>
+    <select name="<?php echo $this->get_field_name('item'); ?>" id="<?php echo $this->get_field_id('item'); ?>">
+      <option value=""> [Please make your selection] </option>
+      <?php foreach(spp_get_cat_post_hierarki() as $category) : ?>
+        <option <?php echo ('c:' . $category['category_id'] == $instance['item']) ? 'selected' : '' ?> value="c:<?php echo $category['category_id']; ?>">
+          Category: <?php echo $category['category_name']; ?>
         </option>
-      <?php endforeach; ?>
-    </select>
-  </p>
-
-  <p>
-    <label for="<?php echo $this->get_field_name('post'); ?>"><?php echo __('Select a post:'); ?></label><br>
-    <select name="<?php echo $this->get_field_name('post'); ?>" id="<?php echo $this->get_field_id('post'); ?>">
-    <option value=""> - </option>
-    <?php include_once('db_queries.php');
-      foreach(spp_get_all_posts() as $post) : ?>
-        <option <?php echo ($post->ID == $instance['post']) ? 'selected' : '' ?> value="<?php echo $post->ID; ?>">
-          <?php echo $post->post_title; ?>
-        </option>
+        
+        <?php foreach($category['children'] as $post): ?>
+          <option <?php echo ('p:' . $post['post_id'] == $instance['item']) ? 'selected' : '' ?> value="p:<?php echo $post['post_id']; ?>">
+            - <?php echo $post['post_name']; ?>
+          </option>
+        <?php endforeach; ?>
+      
       <?php endforeach; ?>
     </select>
   </p>

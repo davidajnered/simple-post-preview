@@ -25,13 +25,20 @@ class simple_post_preview extends WP_Widget {
       // Variables
       $title = $instance['title'];
       $length = (int)$instance['length'];
-      $category = (int)$instance['category'];
-      $post = (int)$instance['post'];
+      //$category = (int)$instance['category'];
+      $item = (int)$instance['item'];
       $thumbnail = $instance['thumbnail'];
       $thumbnail_size = $instance['thumbnail_size'];
       $link = $instance['link'];
       $link_to = $instance['link_to'];
 
+      // Parse value
+      if(strpos($object, 'p:') !== FALSE) {
+        $post = $object;
+      } elseif(strpos($object, 'c:') !== FALSE) {
+        $category = $object;
+      }
+      
       include_once('includes/db_queries.php');
       if($category != 0) {
         $data = spp_get_post('category', $category);
@@ -64,12 +71,13 @@ class simple_post_preview extends WP_Widget {
  /**
   * Saves the widget settings
   */
-  function update($new_instance, $old_instance){
+  function update($new_instance, $old_instance) {
+    error_log(var_export($new_instance, TRUE));
     $thumb = strip_tags(stripslashes($new_instance['thumbnail']));
     $instance = $old_instance;
     $instance['title'] = strip_tags(stripslashes($new_instance['title']));
-    $instance['category'] = strip_tags(stripslashes($new_instance['category']));
-    $instance['post'] = strip_tags(stripslashes($new_instance['post']));
+    //$instance['category'] = strip_tags(stripslashes($new_instance['category']));
+    $instance['item'] = strip_tags(stripslashes($new_instance['item']));
     $instance['thumbnail'] = $thumb != 'checked' ? FALSE : TRUE;
     $instance['thumbnail_size'] = strip_tags(stripslashes($new_instance['thumbnail_size']));
     $instance['length'] = strip_tags(stripslashes($new_instance['length']));
@@ -83,9 +91,10 @@ class simple_post_preview extends WP_Widget {
   * Form for admin
   */
   function form($instance) {
+    error_log(var_export($instance, TRUE));
     $title = htmlspecialchars($instance['title']);
-    $category = htmlspecialchars($instance['category']);
-    $post = htmlspecialchars($instance['post']);
+    //$category = htmlspecialchars($instance['category']);
+    $item = htmlspecialchars($instance['item']);
     $thumbnail = htmlspecialchars($instance['thumbnail']);
     $thumbnail_size = htmlspecialchars($instance['thumbnail_size']);
     $length = htmlspecialchars($instance['length']);
