@@ -1,14 +1,17 @@
 <?php
 /*
  * Plugin Name: Simple Post Preview
- * Version: 1.1.0
+ * Version: 1.2.5
  * Plugin URI: http://www.davidajnered.com/
- * Description: Simple Post Preview is a widget that displays (a part of) the latest post from a category.
+ * Description: Simple Post Preview is a widget that creates pushes for posts.
  * Author: David Ajnered
  */
 
 class simple_post_preview extends WP_Widget {
 
+  /**
+  * Init method
+  */
   function simple_post_preview(){
     $widget_ops = array('classname' => 'simple_post_preview',
                         'description' => __("Displays (a part of) the latest post from a category"));
@@ -17,7 +20,7 @@ class simple_post_preview extends WP_Widget {
     $this->WP_Widget('simple_post_preview', __('Simple Post Preview'), $widget_ops, $control_ops);
   }
 
- /*
+ /**
   * Displays the widget
   */
   function widget($args, $instance) {
@@ -25,20 +28,19 @@ class simple_post_preview extends WP_Widget {
       // Variables
       $title = $instance['title'];
       $length = (int)$instance['length'];
-      //$category = (int)$instance['category'];
-      $item = (int)$instance['item'];
+      $item = $instance['item'];
       $thumbnail = $instance['thumbnail'];
       $thumbnail_size = $instance['thumbnail_size'];
       $link = $instance['link'];
       $link_to = $instance['link_to'];
 
-      // Parse value
-      if(strpos($object, 'p:') !== FALSE) {
-        $post = $object;
-      } elseif(strpos($object, 'c:') !== FALSE) {
-        $category = $object;
+      // Find dropdown value
+      if(strpos($item, 'p:') !== FALSE) {
+        $post = str_replace('p:', '', $item);
+      } else if(strpos($item, 'c:') !== FALSE) {
+        $category = str_replace('c:', '', $item);
       }
-      
+
       include_once('includes/db_queries.php');
       if($category != 0) {
         $data = spp_get_post('category', $category);
@@ -72,28 +74,23 @@ class simple_post_preview extends WP_Widget {
   * Saves the widget settings
   */
   function update($new_instance, $old_instance) {
-    error_log(var_export($new_instance, TRUE));
     $thumb = strip_tags(stripslashes($new_instance['thumbnail']));
     $instance = $old_instance;
     $instance['title'] = strip_tags(stripslashes($new_instance['title']));
-    //$instance['category'] = strip_tags(stripslashes($new_instance['category']));
     $instance['item'] = strip_tags(stripslashes($new_instance['item']));
     $instance['thumbnail'] = $thumb != 'checked' ? FALSE : TRUE;
     $instance['thumbnail_size'] = strip_tags(stripslashes($new_instance['thumbnail_size']));
     $instance['length'] = strip_tags(stripslashes($new_instance['length']));
     $instance['link'] = strip_tags(stripslashes($new_instance['link']));
     $instance['link_to'] = strip_tags(stripslashes($new_instance['link_to']));
-
     return $instance;
   }
 
  /**
-  * Form for admin
+  * GUI for backend
   */
   function form($instance) {
-    error_log(var_export($instance, TRUE));
     $title = htmlspecialchars($instance['title']);
-    //$category = htmlspecialchars($instance['category']);
     $item = htmlspecialchars($instance['item']);
     $thumbnail = htmlspecialchars($instance['thumbnail']);
     $thumbnail_size = htmlspecialchars($instance['thumbnail_size']);
@@ -107,14 +104,17 @@ class simple_post_preview extends WP_Widget {
 
 } /* End of class */
 
- /**
-  * Register Widget
-  */
+/**
+ * Register Widget
+ */
 function simple_post_preview_init() {
   register_widget('simple_post_preview');
 }
 add_action('widgets_init', 'simple_post_preview_init');
 
+/**
+ * Add CSS and JS to head
+ */
 function simple_post_preview_head() {
   echo '<link rel="stylesheet" type="text/css" href="'.get_bloginfo('url').'/wp-content/plugins/simple-post-preview/css/simple-post-preview.css" />';
   echo '<script type="text/javascript" src="'.get_bloginfo('url').'/wp-content/plugins/simple-post-preview/js/simple-post-preview.js"></script>';
