@@ -1,7 +1,7 @@
 /*
  * Implement javascript and ajax stuff
  */
-jQuery('document').ready(function() {
+jQuery(document).ready(function() {
 
   initCheckbox();
 
@@ -15,8 +15,12 @@ jQuery('document').ready(function() {
 
 });
 
+jQuery(document).ajaxSuccess(function() {
+  initCheckbox();
+});
+
 function initCheckbox() {
-  if(jQuery(this).is(':checked')) {
+  if(jQuery('#widget-simple_post_preview-3-thumbnail').is(':checked')) {
     jQuery('#widget-simple_post_preview-3-thumbnail_size').parent('p').show();
   } else {
     jQuery('#widget-simple_post_preview-3-thumbnail_size').parent('p').hide();

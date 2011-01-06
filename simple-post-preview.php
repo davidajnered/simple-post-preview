@@ -31,6 +31,7 @@ class simple_post_preview extends WP_Widget {
       $item = $instance['item'];
       $thumbnail = $instance['thumbnail'];
       $thumbnail_size = $instance['thumbnail_size'];
+      $data_to_use = $instance['data_to_use'];
       $link = $instance['link'];
       $link_to = $instance['link_to'];
 
@@ -80,6 +81,7 @@ class simple_post_preview extends WP_Widget {
     $instance['item'] = strip_tags(stripslashes($new_instance['item']));
     $instance['thumbnail'] = $thumb != 'checked' ? FALSE : TRUE;
     $instance['thumbnail_size'] = strip_tags(stripslashes($new_instance['thumbnail_size']));
+    $instance['data_to_use'] = strip_tags(stripslashes($new_instance['data_to_use']));
     $instance['length'] = strip_tags(stripslashes($new_instance['length']));
     $instance['link'] = strip_tags(stripslashes($new_instance['link']));
     $instance['link_to'] = strip_tags(stripslashes($new_instance['link_to']));
@@ -94,6 +96,7 @@ class simple_post_preview extends WP_Widget {
     $item = htmlspecialchars($instance['item']);
     $thumbnail = htmlspecialchars($instance['thumbnail']);
     $thumbnail_size = htmlspecialchars($instance['thumbnail_size']);
+    $data_to_use = htmlspecialchars($instance['data_to_use']);
     $length = htmlspecialchars($instance['length']);
     $link = htmlspecialchars($instance['link']);
     $link_to = htmlspecialchars($instance['link_to']);

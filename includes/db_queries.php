@@ -34,7 +34,7 @@ function spp_get_post($type, $selector) {
   switch($type) {
     case 'category':
       $data = $wpdb->get_results(
-        "SELECT ID, post_title, post_content, post_date, post_status, guid, term_id
+        "SELECT ID, post_title, post_content, post_excerpt, post_date, post_status, guid, term_id
          FROM {$wpdb->posts}
          LEFT JOIN {$wpdb->term_relationships}
          ON object_id = ID
@@ -49,7 +49,7 @@ function spp_get_post($type, $selector) {
 
     case 'post':
       $data = $wpdb->get_results(
-        "SELECT ID, post_title, post_content, post_date, post_status, guid
+        "SELECT ID, post_title, post_content, post_excerpt, post_date, post_status, guid
          FROM {$wpdb->posts}
          LEFT JOIN {$wpdb->term_relationships}
          ON object_id = ID

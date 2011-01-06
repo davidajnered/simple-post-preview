@@ -49,7 +49,15 @@
 </div>
 
   <p>
-    <label for="<?php echo $this->get_field_name('length'); ?>"><?php echo __('Length of excerpt:'); ?></label><br>
+    Use: 
+    <input id="<?php echo $this->get_field_id('data_to_use'); ?>" name="<?php echo $this->get_field_name('data_to_use'); ?>" type="radio" value="content" <?php echo $data_to_use == 'content' ? 'checked': ''; ?> />
+    content
+    <input id="<?php echo $this->get_field_id('data_to_use'); ?>" name="<?php echo $this->get_field_name('data_to_use'); ?>" type="radio" value="excerpt" <?php echo $data_to_use == 'excerpt' ? 'checked': ''; ?> />
+    excerpt
+  </p>
+
+  <p>
+    <label for="<?php echo $this->get_field_name('length'); ?>"><?php echo __('Length in chars:'); ?></label><br>
     <input id="<?php echo $this->get_field_id('length'); ?>" name="<?php echo $this->get_field_name('length'); ?>" type="text" value="<?php echo $length; ?>" />
   </p>
 
