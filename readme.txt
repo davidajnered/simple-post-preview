@@ -4,7 +4,7 @@ Donate link: http://www.davidajnered.com/
 Tags: simple, post, preview, category, push, widget, promote, excerpt, static, dynamic
 Requires at least:
 Tested up to: 3.0.1
-Stable tag: 1.2.0
+Stable tag: 1.2.3
 
 Simple Post Preview is a multi-instance widget that creates a push for the latest post in a category.
 
@@ -13,9 +13,6 @@ Simple Post Preview is a multi-instance widget that creates a push for the lates
 This widget lets you create a push for any post you like. It can create two kinds of pushes, both dynamic and static ones. A dynamic push is a push that shows the latest post from a category you select. It will automatically update it for you. To create a dymanic push simply select a category from the category drop down.To create a static push you select the post you want to show from the post drop down instead. This push will never change unless you reconfigure the widget.
 
 For more updated information see http://davidajnered.dev/simple-post-preview/
-
-What's in the future?
-- javascript for admin UI
 
 If you have an idea for improvement feel free to send me an email at davidajnered@gmail.com. Feedback is always appreciated. If you want to add some code yourself you can fork Simple Post Preview on github (https://github.com/davidajnered/simple-post-preview). Make your change and send me a pull request.
 
@@ -29,11 +26,11 @@ If you have an idea for improvement feel free to send me an email at davidajnere
 
 There aren't many ways to set it up, but here is a small tutorial
 Title: You can choose to write a header. If you don't, the title of the post will be used as the header instead
-Select Category: Select one of your categories from which you want to display the latest post
-Select Post: Select a specific post to create a static push
+Select a post or a category: Select a category from which you want do display the latest post. This will update automatically when you create new content. If you want a static push for a specific post, select a post instead.
+Use: Choose if you want to use the content or excerpt text in your push.
 Thumbnail: Select this if you want to show the post thumbnail in the push
-Thumbnail size: The name of the thumbnail size you want to use. It's specified in functions.php
-Length of preview: The number of characters from the post shown in the preview. -1 will hide the content and 0 will show all.
+Thumbnail size: The name of the thumbnail size you want to use. Updates when you upload an image.
+Length in characters: The number of characters displayed from the content or excerpt. -1 will hide the content and 0 will show all.
 Link: The name of the link that takes you to the full post
 Link to: You can choose to link to either the post or the category
 
