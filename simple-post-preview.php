@@ -50,13 +50,17 @@ class simple_post_preview extends WP_Widget {
         $data = spp_get_post('post', $post);
         $data = $data[0];
       } else {
-        // If database returns nothing, set default values
-        $title = "Simple Post Preview";
-        $length = 100;
-        $data = (object)array(
-          'post_title' => 'Error!',
-          'post_content' => 'This widget needs configuration',
-        );
+        // If no post or category is selected, use the most recent post.
+        $data = spp_get_post('post');
+        $data = $data[0];
+        if(!$data) {
+          $title = "Simple Post Preview";
+          $length = 100;
+          $data = (object)array(
+            'post_title' => 'Error!',
+            'post_content' => 'This widget needs configuration',
+          );
+        }
       }
     }
 
@@ -68,7 +72,7 @@ class simple_post_preview extends WP_Widget {
     }
 
     //Print to view
-    include_once('includes/view.php');
+    include('includes/view.php');
   }
 
  /**

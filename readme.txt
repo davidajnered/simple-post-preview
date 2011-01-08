@@ -1,7 +1,7 @@
 === Simple Post Preview ===
 Contributors: davidajnered
 Donate link: http://www.davidajnered.com/
-Tags: simple, post, preview, category, push, widget, promote, excerpt
+Tags: simple, post, preview, category, push, widget, promote, excerpt, static, dynamic
 Requires at least:
 Tested up to: 3.0.1
 Stable tag: 1.2.0
@@ -27,13 +27,13 @@ If you have an idea for improvement feel free to send me an email at davidajnere
 4. Setup Simple Post Preview so that is displays what you want
 4.1 If you want to use the features image in your push you'll have to enable it in your theme and add a thumbnail size 
 
-There aren't many ways to set it up, but here is a walkthrough
+There aren't many ways to set it up, but here is a small tutorial
 Title: You can choose to write a header. If you don't, the title of the post will be used as the header instead
 Select Category: Select one of your categories from which you want to display the latest post
 Select Post: Select a specific post to create a static push
 Thumbnail: Select this if you want to show the post thumbnail in the push
 Thumbnail size: The name of the thumbnail size you want to use. It's specified in functions.php
-Length of preview: The number of characters from the post shown in the preview 
+Length of preview: The number of characters from the post shown in the preview. -1 will hide the content and 0 will show all.
 Link: The name of the link that takes you to the full post
 Link to: You can choose to link to either the post or the category
 

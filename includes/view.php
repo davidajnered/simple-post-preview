@@ -16,20 +16,18 @@ if($thumbnail == TRUE) {
 }
 
 // Use post content or post excerpt
-error_log(var_export($data_to_use, TRUE));
-error_log(var_export($data, TRUE));
-if($data_to_use == 'content') {
-  $content = strip_tags($data->post_content);
-} else {
+if($data_to_use == 'excerpt') {
   $content = strip_tags($data->post_excerpt);
+} else {
+  $content = strip_tags($data->post_content);
 }
 
-// Show the specified length of content
-if(strlen($content) > $length) {
+// Show the specified length of the content
+if($length < -1) {
+  $content = '';
+} else if (strlen($content) > $length) {
   if($length > 0) {
-    $content = substr($content, 0, $length).'&hellip; ';
-  } else {
-    $content = '';
+    $content = substr($content, 0, $length) . '&hellip; ';
   }
 }
 

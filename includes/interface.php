@@ -15,13 +15,13 @@
         <option <?php echo ('c:' . $category['category_id'] == $instance['item']) ? 'selected' : '' ?> value="c:<?php echo $category['category_id']; ?>">
           Category: <?php echo $category['category_name']; ?>
         </option>
-        
+
         <?php foreach($category['children'] as $post): ?>
           <option <?php echo ('p:' . $post['post_id'] == $instance['item']) ? 'selected' : '' ?> value="p:<?php echo $post['post_id']; ?>">
             - <?php echo $post['post_name']; ?>
           </option>
         <?php endforeach; ?>
-      
+
       <?php endforeach; ?>
     </select>
   </p>
@@ -30,11 +30,11 @@
   <label>Thumbnail</label>
   <div class="spp-thumbnail-wrapper">
   <p>
-    <input id="<?php echo $this->get_field_id('thumbnail') ?>" name="<?php echo $this->get_field_name('thumbnail'); ?>" type="checkbox" value="checked" <?php echo $thumbnail ? 'checked': ''; ?>>
+    <input id="<?php echo $this->get_field_id('thumbnail') ?>" class="spp_thumbnail_checkbox" name="<?php echo $this->get_field_name('thumbnail'); ?>" type="checkbox" value="checked" <?php echo $thumbnail ? 'checked': ''; ?>>
     Show thumbnail in push
   </p>
 
-  <p>
+  <p class="spp_thumbnail_dropdown_wrapper">
     <label for="<?php echo $this->get_field_name('thumbnail_size'); ?>"><?php echo __('Select thumbnail size:'); ?></label><br>
     <select name="<?php echo $this->get_field_name('thumbnail_size'); ?>" id="<?php echo $this->get_field_id('thumbnail_size'); ?>">
     <?php include_once('db_queries.php');
@@ -49,7 +49,7 @@
 </div>
 
   <p>
-    Use: 
+    Use:
     <input id="<?php echo $this->get_field_id('data_to_use'); ?>" name="<?php echo $this->get_field_name('data_to_use'); ?>" type="radio" value="content" <?php echo $data_to_use == 'content' ? 'checked': ''; ?> />
     content
     <input id="<?php echo $this->get_field_id('data_to_use'); ?>" name="<?php echo $this->get_field_name('data_to_use'); ?>" type="radio" value="excerpt" <?php echo $data_to_use == 'excerpt' ? 'checked': ''; ?> />
@@ -57,7 +57,7 @@
   </p>
 
   <p>
-    <label for="<?php echo $this->get_field_name('length'); ?>"><?php echo __('Length in chars:'); ?></label><br>
+    <label for="<?php echo $this->get_field_name('length'); ?>"><?php echo __('Length in characters:'); ?></label><br>
     <input id="<?php echo $this->get_field_id('length'); ?>" name="<?php echo $this->get_field_name('length'); ?>" type="text" value="<?php echo $length; ?>" />
   </p>
 

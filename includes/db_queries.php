@@ -29,35 +29,46 @@ function spp_get_all_posts($category = NULL) {
 /**
  * Select a specific post or the latest post from a category
  */
-function spp_get_post($type, $selector) {
+function spp_get_post($type, $selector = NULL) {
   global $wpdb;
-  switch($type) {
-    case 'category':
-      $data = $wpdb->get_results(
-        "SELECT ID, post_title, post_content, post_excerpt, post_date, post_status, guid, term_id
-         FROM {$wpdb->posts}
-         LEFT JOIN {$wpdb->term_relationships}
-         ON object_id = ID
-         LEFT JOIN {$wpdb->term_taxonomy}
-         ON {$wpdb->term_relationships}.term_taxonomy_id = {$wpdb->term_taxonomy}.term_taxonomy_id
-         WHERE term_id = $selector
-         AND post_status = 'publish'
-         ORDER BY post_date
-         DESC LIMIT 1;"
-      );
-      break;
+  if($selector == NULL) {
+    $data = $wpdb->get_results(
+      "SELECT ID, post_title, post_content, post_excerpt, post_date, post_status, guid
+       FROM {$wpdb->posts}
+       LEFT JOIN {$wpdb->term_relationships}
+       ON object_id = ID
+       WHERE ID = (SELECT max(ID) FROM {$wpdb->posts} WHERE post_type = 'post' AND post_status = 'publish')
+       LIMIT 1;"
+    );
+  } else {
+    switch($type) {
+      case 'category':
+        $data = $wpdb->get_results(
+          "SELECT ID, post_title, post_content, post_excerpt, post_date, post_status, guid, term_id
+           FROM {$wpdb->posts}
+           LEFT JOIN {$wpdb->term_relationships}
+           ON object_id = ID
+           LEFT JOIN {$wpdb->term_taxonomy}
+           ON {$wpdb->term_relationships}.term_taxonomy_id = {$wpdb->term_taxonomy}.term_taxonomy_id
+           WHERE term_id = $selector
+           AND post_status = 'publish'
+           ORDER BY post_date
+           DESC LIMIT 1;"
+        );
+        break;
 
-    case 'post':
-      $data = $wpdb->get_results(
-        "SELECT ID, post_title, post_content, post_excerpt, post_date, post_status, guid
-         FROM {$wpdb->posts}
-         LEFT JOIN {$wpdb->term_relationships}
-         ON object_id = ID
-         WHERE ID = $selector
-         AND post_status = 'publish'
-         LIMIT 1;"
-      );
-      break;
+      case 'post':
+        $data = $wpdb->get_results(
+          "SELECT ID, post_title, post_content, post_excerpt, post_date, post_status, guid
+           FROM {$wpdb->posts}
+           LEFT JOIN {$wpdb->term_relationships}
+           ON object_id = ID
+           WHERE ID = $selector
+           AND post_status = 'publish'
+           LIMIT 1;"
+        );
+        break;
+    }
   }
   return $data;
 }
