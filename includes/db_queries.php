@@ -95,18 +95,20 @@ function spp_get_categories() {
 function spp_get_thumbnail_sizes() {
   global $wpdb;
   $data = $wpdb->get_results(
-    "SELECT meta_value FROM {$wpdb->postmeta}
-     WHERE meta_key = '_wp_attachment_metadata'
-     AND post_id = (SELECT max(post_id) FROM {$wpdb->postmeta});"
+   "SELECT meta_value FROM {$wpdb->postmeta}
+    WHERE post_id = (SELECT max(post_id) FROM {$wpdb->postmeta} WHERE meta_key = '_wp_attachment_metadata');"
   );
-  $data = unserialize($data[0]->meta_value);
-  if($data != FALSE) {
-    foreach($data['sizes'] as $key => $values) {
-      $options[$key] = $key . ' [H:'.$values['height'].'px W:'.$values['width'].'px]';
+
+  foreach($data as $object) {
+    $data_array = unserialize($object->meta_value);
+    if($data_array != FALSE && is_array($data_array)) {
+      foreach($data_array['sizes'] as $key => $values) {
+        $options[$key] = $key . ' [H:'.$values['height'].'px W:'.$values['width'].'px]';
+      }
+      ksort($options);
+    } else {
+      $options = array();
     }
-    ksort($options);
-  } else {
-    $options = array();
   }
   return $options;
 }
