@@ -11,7 +11,7 @@
     <label for="<?php echo $this->get_field_name('item'); ?>"><?php echo __('Select a post or a category:'); ?></label><br>
     <select name="<?php echo $this->get_field_name('item'); ?>" id="<?php echo $this->get_field_id('item'); ?>">
       <option value=""> [Please make your selection] </option>
-      <?php foreach(spp_get_cat_post_hierarki() as $category) : ?>
+      <?php foreach(spp_get_dropdown() as $category) : ?>
         <option <?php echo ('c:' . $category['category_id'] == $instance['item']) ? 'selected' : '' ?> value="c:<?php echo $category['category_id']; ?>">
           Category: <?php echo $category['category_name']; ?>
         </option>

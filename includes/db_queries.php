@@ -114,7 +114,7 @@ function spp_get_thumbnail_sizes() {
 /**
  *
  */
-function spp_get_cat_post_hierarki() {
+function spp_get_dropdown() {
   $categories = spp_get_categories();
   $i = 0;
   foreach($categories as $category) {
