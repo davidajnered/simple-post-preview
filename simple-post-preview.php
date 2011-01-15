@@ -14,7 +14,7 @@ class simple_post_preview extends WP_Widget {
   */
   function simple_post_preview(){
     $widget_ops = array('classname' => 'simple_post_preview',
-                        'description' => __("Displays (a part of) the latest post from a category"));
+                        'description' => __("Creates pushes for your posts"));
 
     $control_ops = array('width' => 100, 'height' => 100);
     $this->WP_Widget('simple_post_preview', __('Simple Post Preview'), $widget_ops, $control_ops);
