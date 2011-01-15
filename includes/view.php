@@ -12,7 +12,9 @@ $output .= $args['after_title'];
 
 // Show thumbnail
 if($thumbnail == TRUE) {
+  $output .= '<a href="' . $url . '">';
   $output .= get_the_post_thumbnail($data->ID, $thumbnail_size);
+  $output .= '</a>';
 }
 
 // Use post content or post excerpt

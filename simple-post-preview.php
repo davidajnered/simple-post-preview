@@ -66,8 +66,10 @@ class simple_post_preview extends WP_Widget {
 
     if($data != NULL) {
       // Set link url, post is default
-      $html_link = '<a href="'.get_bloginfo('url');
-      $html_link .= ($link_to == 'Category') ? '?cat='.$data->term_id : '?p='.$data->ID;
+      $url = get_bloginfo('url');
+      $url .= ($link_to == 'Category') ? '?cat='.$data->term_id : '?p='.$data->ID;
+      $html_link = '<a href="';
+      $html_link .= $url;
       $html_link .= '">'.$link.'</a>';
     }
 
