@@ -42,6 +42,11 @@ Link to: You can choose to link to either the post or the category
 
 == Changelog ==
 
+= 1.2.3 =
+* Improved UI for admins
+* Links on thumbnails
+* You can now use both post content and excerpt
+
 = 1.2.0 =
 * Added the ability to select a specific post
 * Automatically finds all available thumbnail sizes
