@@ -25,7 +25,7 @@ if($data_to_use == 'excerpt') {
 }
 
 // Show the specified length of the content
-if($length < -1) {
+if($length <= -1) {
   $content = '';
 } else if (strlen($content) > $length) {
   if($length > 0) {
