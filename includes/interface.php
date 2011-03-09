@@ -58,6 +58,7 @@
   <p>
     <label for="<?php echo $this->get_field_name('length'); ?>"><?php echo __('Length in characters:'); ?></label><br>
     <input id="<?php echo $this->get_field_id('length'); ?>" name="<?php echo $this->get_field_name('length'); ?>" type="text" value="<?php echo $length; ?>" />
+    <small>-1 hides the content and 0 shows all</small>
   </p>
 
   <p>

@@ -19,9 +19,9 @@ if($thumbnail == TRUE) {
 
 // Use post content or post excerpt
 if($data_to_use == 'excerpt') {
-  $content = strip_tags($data->post_excerpt);
+  $content = $data->post_excerpt;
 } else {
-  $content = strip_tags($data->post_content);
+  $content = $data->post_content;
 }
 
 // Show the specified length of the content
@@ -34,7 +34,7 @@ if($length <= -1) {
 }
 
 // Link to post of category
-$output .= '<p>' . $content . ' ' . $html_link . '</p>' . $args['after_widget'];
+$output .= $content . ' ' . $html_link . $args['after_widget'];
 
 // Print
 echo $output;

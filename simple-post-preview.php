@@ -125,8 +125,9 @@ add_action('widgets_init', 'simple_post_preview_init');
  * Add CSS and JS to head
  */
 function simple_post_preview_head() {
-  echo '<link rel="stylesheet" type="text/css" href="'.get_bloginfo('url').'/wp-content/plugins/simple-post-preview/css/simple-post-preview.css" />';
-  echo '<script type="text/javascript" src="'.get_bloginfo('url').'/wp-content/plugins/simple-post-preview/js/simple-post-preview.js"></script>';
+  $plug_path = WP_PLUGIN_URL.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__));
+  echo '<link rel="stylesheet" type="text/css" href="' . $plug_path . '/css/simple-post-preview.css" />';
+  echo '<script type="text/javascript" src="' . $plug_path . '/js/simple-post-preview.js"></script>';
 }
 add_action('admin_head', 'simple_post_preview_head');
 
