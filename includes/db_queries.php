@@ -95,8 +95,14 @@ function spp_get_categories() {
 function spp_get_thumbnail_sizes() {
   global $wpdb;
   $data = $wpdb->get_results(
-   "SELECT meta_value FROM {$wpdb->postmeta}
-    WHERE post_id = (SELECT max(post_id) FROM {$wpdb->postmeta} WHERE meta_key = '_wp_attachment_metadata');"
+    "SELECT meta_value
+    FROM {$wpdb->postmeta} AS postmeta
+    WHERE post_id = (SELECT max(post_id)
+    FROM {$wpdb->postmeta} AS postmeta
+    LEFT JOIN {$wpdb->posts} AS posts
+    ON postmeta.post_id = posts.ID
+    WHERE post_mime_type LIKE '%image%')
+    AND meta_key = '_wp_attachment_metadata'"
   );
 
   foreach($data as $object) {
