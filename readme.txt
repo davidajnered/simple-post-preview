@@ -4,7 +4,7 @@ Donate link: http://www.davidajnered.com/
 Tags: simple, post, preview, category, push, widget, promote, excerpt, static, dynamic
 Requires at least:
 Tested up to: 3.1
-Stable tag: 1.2.4
+Stable tag: 1.2.5
 
 Simple Post Preview is a multi-instance widget that creates pushes for posts.
 
@@ -42,6 +42,8 @@ Link to: You can choose to link to either the post or the category
 
 == Changelog ==
 
+= 1.2.5 =
+* Improved thumbnail query to not select anything that's not an image
 = 1.2.4 =
 * Removed strip_tags function call and custom wrapping p-tag from content 
 
