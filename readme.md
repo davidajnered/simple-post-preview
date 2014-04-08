@@ -1,20 +1,14 @@
-=== Simple Post Preview ===
-Contributors: davidajnered
-Donate link: http://www.davidajnered.com/
-Tags: simple, post, preview, category, push, widget, promote, excerpt, static, sticky, dynamic
-Requires at least:
-Tested up to: 3.8.1.
-Stable tag: 1.2.6
+# Simple Post Preview
 
 Simple Post Preview is a multi-instance widget that creates pushes for posts.
 
-== Description ==
+## Description
 
 This widget lets you create a push for any post you like. It can create two kinds of pushes, both dynamic and sticky ones. A dynamic push is a push that shows the latest post from a category you select. It will automatically update it for you. To create a dynamic push simply select a category from the category drop down.To create a sticky push you select the post you want to show from the post drop down instead. This push will never change unless you reconfigure the widget.
 
 If you have an idea for improvement feel free to send me an email at david@ajnered.com. Feedback is always appreciated. If you want to add some code yourself you can fork Simple Post Preview on github (https://github.com/davidajnered/simple-post-preview). Make your change and send me a pull request.
 
-== Installation ==
+## Installation
 
 1. Upload the simple-post-preview folder to to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
@@ -32,45 +26,39 @@ Length in characters: The number of characters displayed from the content or exc
 Link: The name of the link that takes you to the full post
 Link to: You can choose to link to either the post or the category
 
-== Frequently Asked Questions ==
+## Changelog
 
-== Screenshots ==
-
-1. The widgets GUI from the administration panel
-
-== Changelog ==
-
-= 1.2.6 =
+### 1.2.6
 * Making sure everything is still working.
 
-= 1.2.5 =
+### 1.2.5
 * Improved thumbnail query to not select anything that's not an image
 
-= 1.2.4 =
+### 1.2.4
 * Removed strip_tags function call and custom wrapping p-tag from content
 
-= 1.2.3 =
+### 1.2.3
 * Improved UI for admins
 * Links on thumbnails
 * You can now use both post content and excerpt
 
-= 1.2.0 =
+### 1.2.0
 * Added the ability to select a specific post
 * Automatically finds all available thumbnail sizes
 * Added a wrapper around the excerpt
 
-= 1.1.0 =
+### 1.1.0
 * It's now possible to use the posts featured image in the preview
 * Widget does no longer show the post title when you write a custom title
 
-= 1.0.1 =
+### 1.0.1
 * Fixed a bug that made the widget show a post from another category than the one selected
 * It's no longer possible to select an empty category
 
-= 1.0 =
+### 1.0
 * First version of Simple Post Preview
 
-== Upgrade Notice ==
+## Upgrade Notice
 
-= 1.0.1 =
+### 1.0.1
 This upgrade fixes an incorrect database query that made the widget show posts from the wrong category

@@ -1,7 +1,7 @@
 <?php
 /*
  * Plugin Name: Simple Post Preview
- * Version: 1.2.5
+ * Version: 1.2.6
  * Plugin URI: http://www.davidajnered.com/
  * Description: Simple Post Preview is a widget that creates pushes for posts.
  * Author: David Ajnered
