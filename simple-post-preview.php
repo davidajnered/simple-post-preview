@@ -6,14 +6,15 @@
  * Description: Simple Post Preview is a widget that creates pushes for posts.
  * Author: David Ajnered
  */
+namespace SimplePostPreview;
 
-class simple_post_preview extends WP_Widget
+class SimplePostPreview extends WP_Widget
 {
 
     /**
      * Init method
      */
-    public function simple_post_preview()
+    public function simplePostPreview()
     {
         $widget_ops = array(
           'classname' => 'simple_post_preview',
@@ -26,9 +27,14 @@ class simple_post_preview extends WP_Widget
 
    /**
     * Displays the widget
+    *
+    * @param $args
+    * @param array $instance
     */
     public function widget($args, $instance)
     {
+        // Todo: create object instead
+
         if (!empty($instance)) {
           // Variables
             $title = $instance['title'];
@@ -62,8 +68,8 @@ class simple_post_preview extends WP_Widget
                     $title = "Simple Post Preview";
                     $length = 100;
                     $data = (object) array(
-                      'post_title' => 'Error!',
-                      'post_content' => 'This widget needs configuration',
+                        'post_title' => 'Error!',
+                        'post_content' => 'This widget needs configuration',
                     );
                 }
             }
@@ -78,7 +84,7 @@ class simple_post_preview extends WP_Widget
             $html_link .= '">'.$link.'</a>';
         }
 
-        //Print to view
+        // Print to view
         include('includes/view.php');
     }
 
@@ -126,7 +132,7 @@ class simple_post_preview extends WP_Widget
  */
 function simple_post_preview_init()
 {
-    register_widget('simple_post_preview');
+    register_widget('SimplePostPreview');
 }
 add_action('widgets_init', 'simple_post_preview_init');
 
@@ -135,6 +141,7 @@ add_action('widgets_init', 'simple_post_preview_init');
  */
 function simple_post_preview_head()
 {
+    // Todo: register script the correct way
     $plug_path = WP_PLUGIN_URL . '/' . str_replace(basename(__FILE__), "", plugin_basename(__FILE__));
     echo '<link rel="stylesheet" type="text/css" href="' . $plug_path . '/css/simple-post-preview.css" />';
     echo '<script type="text/javascript" src="' . $plug_path . '/js/simple-post-preview.js"></script>';
