@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Plugin Name: Simple Post Preview
  * Version: 1.2.6
  * Plugin URI: http://www.davidajnered.com/
@@ -8,13 +8,13 @@
  */
 namespace SimplePostPreview;
 
-class SimplePostPreview extends WP_Widget
+class SimplePostPreview extends \WP_Widget
 {
 
     /**
      * Init method
      */
-    public function simplePostPreview()
+    public function __construct()
     {
         $widget_ops = array(
           'classname' => 'simple_post_preview',
@@ -132,9 +132,9 @@ class SimplePostPreview extends WP_Widget
  */
 function simple_post_preview_init()
 {
-    register_widget('SimplePostPreview');
+    register_widget('SimplePostPreview\SimplePostPreview');
 }
-add_action('widgets_init', 'simple_post_preview_init');
+add_action('widgets_init', 'SimplePostPreview\simple_post_preview_init');
 
 /**
  * Add CSS and JS to head
@@ -146,4 +146,4 @@ function simple_post_preview_head()
     echo '<link rel="stylesheet" type="text/css" href="' . $plug_path . '/css/simple-post-preview.css" />';
     echo '<script type="text/javascript" src="' . $plug_path . '/js/simple-post-preview.js"></script>';
 }
-add_action('admin_head', 'simple_post_preview_head');
+add_action('admin_head', 'SimplePostPreview\simple_post_preview_head');
