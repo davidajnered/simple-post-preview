@@ -16,6 +16,18 @@ class SimplePostPreview extends \WP_Widget
      */
     public function __construct()
     {
+
+        require_once ABSPATH . '/wp-content/plugins/simple-post-preview/lib/Twig/Autoloader.php';
+        \Twig_Autoloader::register();
+
+        $loader = new \Twig_Loader_Filesystem(ABSPATH . '/wp-content/plugins/simple-post-preview/templates');
+        $twig = new \Twig_Environment($loader, array(
+            // 'cache' => ABSPATH . '/wp-content/plugins/simple-post-preview/templates/cache',
+        ));
+
+        $template = $twig->loadTemplate('index.html');
+        echo $template->render(array('name' => 'David', 'go' => 'here'));
+
         $widget_ops = array(
           'classname' => 'simple_post_preview',
           'description' => __("Creates pushes for your posts")
