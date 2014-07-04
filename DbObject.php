@@ -7,116 +7,99 @@ namespace SimplePostPreview;
 
 class DbObject
 {
+    /**
+     * @var array
+     */
+    private $postTypes = array('post', 'articles');
 
-    public function __contructor()
+    /**
+     *
+     */
+    private $cachePath;
+
+    /**
+     *
+     */
+    public function __construct(array $options = array())
     {
+        global $wpdb;
 
+        if (isset($options['post_types']) && is_array($options['post_types'])) {
+            $this->postTypes = $options['post_types'];
+        }
+
+        if (isset($options['cache_path'])) {
+            $this->cachePath = $options['cache_path'];
+        }
     }
 
     /**
      * Get all posts or all posts from a category
      */
-    function getAllPosts($category = null)
+    public function getPosts($category = null)
     {
-        global $wpdb;
-        $query = "
-            SELECT ID, post_title, post_content, post_date, post_status, guid, term_id
-            FROM {$wpdb->posts}
-            LEFT JOIN {$wpdb->term_relationships}
-            ON object_id = ID
-            LEFT JOIN {$wpdb->term_taxonomy}
-            ON {$wpdb->term_relationships}.term_taxonomy_id = {$wpdb->term_taxonomy}.term_taxonomy_id
-            WHERE post_status = 'publish'
-        ";
-
-        if ($category != null) {
-            $query .= " AND {$wpdb->term_taxonomy}.term_id = " . $category;
+        if (!($posts = $this->loadCache('posts'))) {
+            global $wpdb;
+            $query = "SELECT ID, post_title, post_type FROM {$wpdb->posts} WHERE post_status = 'publish';";
+            $posts = $wpdb->get_results($query);
+            $this->setCache('posts', $posts);
         }
 
-        // Todo: don't limit to just post
-        // Add settings page so user can specify post types
-
-        $query .= "
-            AND post_type = 'post'
-            GROUP BY ID
-            ORDER BY post_date;
-        ";
-
-        $data = $wpdb->get_results($query);
-
-        return $data;
+        return $posts;
     }
 
+    // /**
+    //  * Select a specific post or the latest post from a category
+    //  */
+    // public function getPost($type, $selector = null)
+    // {
+    //     if ($selector == null) {
+    //         $query = "
+    //             SELECT ID, post_title, post_content, post_excerpt, post_date, post_status, guid, post_type
+    //             FROM {$this->db->posts}
+    //             LEFT JOIN {$this->db->term_relationships}
+    //             ON object_id = ID
+    //             WHERE ID = (SELECT max(ID) FROM {$this->db->posts} WHERE post_type = 'post' AND post_status = 'publish')
+    //             LIMIT 1;
+    //         ";
+    //     } else {
+    //         if ($type == 'category') {
+    //             $query = "
+    //                 SELECT ID, post_title, post_content, post_excerpt, post_date, post_status, guid, term_id
+    //                 FROM {$this->db->posts}
+    //                 LEFT JOIN {$this->db->term_relationships}
+    //                 ON object_id = ID
+    //                 LEFT JOIN {$this->db->term_taxonomy}
+    //                 ON {$this->db->term_relationships}.term_taxonomy_id = {$this->db->term_taxonomy}.term_taxonomy_id
+    //                 WHERE term_id = $selector
+    //                 AND post_status = 'publish'
+    //                 ORDER BY post_date
+    //                 DESC LIMIT 1;
+    //             ";
+    //         } elseif ($type == 'post') {
+    //             $query = "
+    //                 SELECT ID, post_title, post_content, post_excerpt, post_date, post_status, guid
+    //                 FROM {$this->db->posts}
+    //                 LEFT JOIN {$this->db->term_relationships}
+    //                 ON object_id = ID
+    //                 WHERE ID = $selector
+    //                 AND post_status = 'publish'
+    //                 LIMIT 1;
+    //             ";
+    //         }
+    //     }
 
-
-    /**
-     * Select a specific post or the latest post from a category
-     */
-    function getPost($type, $selector = null)
-    {
-        global $wpdb;
-
-        if ($selector == null) {
-            $query = "
-                SELECT ID, post_title, post_content, post_excerpt, post_date, post_status, guid
-                FROM {$wpdb->posts}
-                LEFT JOIN {$wpdb->term_relationships}
-                ON object_id = ID
-                WHERE ID = (SELECT max(ID) FROM {$wpdb->posts} WHERE post_type = 'post' AND post_status = 'publish')
-                LIMIT 1;
-            ";
-            $data = $wpdb->get_results($query);
-        } else {
-            switch($type) {
-                case 'category':
-                    $query = "
-                        SELECT ID, post_title, post_content, post_excerpt, post_date, post_status, guid, term_id
-                        FROM {$wpdb->posts}
-                        LEFT JOIN {$wpdb->term_relationships}
-                        ON object_id = ID
-                        LEFT JOIN {$wpdb->term_taxonomy}
-                        ON {$wpdb->term_relationships}.term_taxonomy_id = {$wpdb->term_taxonomy}.term_taxonomy_id
-                        WHERE term_id = $selector
-                        AND post_status = 'publish'
-                        ORDER BY post_date
-                        DESC LIMIT 1;
-                    ";
-                    $data = $wpdb->get_results($query);
-                    break;
-
-                case 'post':
-                    $query = "
-                        SELECT ID, post_title, post_content, post_excerpt, post_date, post_status, guid
-                        FROM {$wpdb->posts}
-                        LEFT JOIN {$wpdb->term_relationships}
-                        ON object_id = ID
-                        WHERE ID = $selector
-                        AND post_status = 'publish'
-                        LIMIT 1;
-                    ";
-                    $data = $wpdb->get_results($query);
-                    break;
-            }
-        }
-        return $data;
-    }
+    //     if ($query) {
+    //         return $this->db->get_results($query);
+    //     }
+    // }
 
     /**
      * Get all categories
      */
-    function getCategories()
+    public function getCategories()
     {
-        global $wpdb;
-
-        $query = "
-            SELECT {$wpdb->terms}.term_id, name FROM {$wpdb->terms}
-            LEFT JOIN {$wpdb->term_taxonomy}
-            ON {$wpdb->term_taxonomy}.term_id = {$wpdb->terms}.term_id
-            WHERE {$wpdb->term_taxonomy}.taxonomy = 'category'
-            AND {$wpdb->term_taxonomy}.count > 0;
-        ";
-
-        $categories = $wpdb->get_results($query);
+        $categories = get_categories(array('type' => $this->postTypes));
 
         return $categories;
     }
@@ -125,56 +108,76 @@ class DbObject
      * Get all available thumbnail sizes
      * Retreived the data from the last uploaded picture.
      */
-    function getThumbnailSizes()
+    public function getThumbnailSizes()
     {
-        global $wpdb;
-
-        $query = "
-            SELECT meta_value
-            FROM {$wpdb->postmeta} AS postmeta
-            WHERE post_id = (SELECT max(post_id)
-            FROM {$wpdb->postmeta} AS postmeta
-            LEFT JOIN {$wpdb->posts} AS posts
-            ON postmeta.post_id = posts.ID
-            WHERE post_mime_type LIKE '%image%')
-            AND meta_key = '_wp_attachment_metadata'
-        ";
-        $data = $wpdb->get_results($query);
-
-        foreach ($data as $object) {
-            $data_array = unserialize($object->meta_value);
-            if ($data_array != false && is_array($data_array)) {
-                foreach ($data_array['sizes'] as $key => $values) {
-                    $options[$key] = $key . ' [H:'.$values['height'].'px W:'.$values['width'].'px]';
-                }
-                ksort($options);
+        $sizes = array();
+        foreach (get_intermediate_image_sizes() as $size) {
+            if (isset($_wp_additional_image_sizes[$size])) {
+                $width = intval($_wp_additional_image_sizes[$size]['width']);
+                $height = intval($_wp_additional_image_sizes[$size]['height']);
             } else {
-                $options = array();
+                $width = get_option($size . '_size_w');
+                $height = get_option($size . '_size_h');
             }
+
+            $sizes[$size] = $size . ' [H:' . $height . 'px W:' . $width . 'px]';
         }
 
-        return $options;
+        return $sizes;
     }
 
-    // /**
-    //  *
-    //  */
-    // function spp_get_dropdown()
-    // {
-    //     $categories = spp_get_categories();
-    //     $i = 0;
-    //     foreach ($categories as $category) {
-    //         $posts = spp_get_all_posts($category->term_id);
-    //         $select[$i]['category_name'] = $category->name;
-    //         $select[$i]['category_id'] = $category->term_id;
-    //         $j = 0;
-    //         foreach ($posts as $post) {
-    //             $select[$i]['children'][$j]['post_name'] = $post->post_title;
-    //             $select[$i]['children'][$j]['post_id'] = $post->ID;
-    //             $j++;
-    //         }
-    //         $i++;
-    //     }
-    //     return $select;
-    // }
+    /**
+     *
+     */
+    private function setCache($key, $data)
+    {
+        // Abort if cache path is not set
+        if (!$this->cachePath) {
+            return;
+        }
+
+        $filename = $this->cachePath . '/cache-' . $key;
+        if (file_exists($filename)) {
+            $this->clearCache($key);
+        }
+
+        $res = file_put_contents($filename, serialize($data));
+
+        if ($res == false) {
+            error_log('cache file ' . $filename . ' could not be created');
+        }
+    }
+
+    /**
+     *
+     */
+    private function loadCache($key)
+    {
+        // Abort if cache path is not set
+        if (!$this->cachePath) {
+            return;
+        }
+
+        $filename = $this->cachePath . '/cache-' . $key;
+        if (file_exists($filename)) {
+            $cache = unserialize(file_get_contents($filename));
+            return $cache;
+        }
+    }
+
+    /**
+     *
+     */
+    private function clearCache($key)
+    {
+        // Abort if cache path is not set
+        if (!$this->cachePath) {
+            return;
+        }
+
+        $filename = $this->cachePath . '/cache-' . $key;
+        if (file_exists($filename)) {
+            unlink($filename);
+        }
+    }
 }

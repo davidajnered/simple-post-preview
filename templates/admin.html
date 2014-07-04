@@ -1,0 +1,69 @@
+<div class="simple-post-preview">
+    <p>
+        <label for="{{title_id}}">Title:</label><br>
+        <input id="{{title_id}}" name="{{title_name}}" type="text" value="{{title}}"/>
+        <small>If empty the posts title will be used</small>
+    </p>
+
+    <p>
+        <label for="item">Select a post or category:</label><br>
+        <select id="item" class="chosen-select" name="item" id="{{ item_id }}" data-placeholder="Select a post or category...">
+            {% for category in categories %}
+                <option value="c-{{category.id}}">{{category.name}} (category)</option>
+            {% endfor %}
+            {% for post in posts %}
+                <option value="p-{{post.id}}">{{post.name}} ({{post.type}})</option>
+            {% endfor %}
+        </select>
+    </p>
+
+    <p>
+        Use:
+        <input id="spp-data-to-use-content" name="{{data_to_use_name}}" type="radio" value="content">
+        <label for="spp-data-to-use-content">content</label>
+        <input id="spp-data-to-use-excerpt" name="{{data_to_use_name}}" type="radio" value="excerpt">
+        <label for="spp-data-to-use-excerpt">excerpt</label>
+    </p>
+
+    <div class="spp-thumbnail">
+        <div class="spp-thumbnail-wrapper">
+            <p>
+                <input id="{{thumbnail_id}}" class="spp_thumbnail_checkbox" name="{{thumbnail_name}}" type="checkbox" value="checked">
+                <label for="{{thumbnail_id}}">Show thumbnail in push</label>
+            </p>
+
+            <p class="spp_thumbnail_dropdown_wrapper">
+                <label for="{{thumbnail_size_id}}">Select thumbnail size:</label>
+                <br>
+                <select name="{{thumbnail_size_name}}" id="{{thumbnail_size_id}}">
+                    {% for size in thumbnail_sizes %}
+                        <option value="{{size.name}}">{{size.description}}</option>
+                    {% endfor %}
+                </select>
+            </p>
+        </div>
+    </div>
+
+    <p>
+        <label for="{{length_id}}">Length in characters:</label>
+        <br>
+        <input id="{{length_id}}" name="{{length_name}}" type="text" value="{{length}}" />
+        <small>-1 hides the content and 0 shows all</small>
+    </p>
+
+    <p>
+        <label for="{{link_id}}">Link title:</label>
+        <br>
+        <input id="{{link_id}}" name="{{link_name}}" type="text" value="{{link}}" />
+    </p>
+
+    <p>
+        <label for="{{link_to_id}}">Link to:</label>
+        <br>
+        <select name="{{link_to_name}}" id="{{link_to_id}}">
+            {% for option in link_options %}
+                <option value="{{option.value}}" >{{option.name}}</option>
+            {% endfor %}
+        </select>
+    </p>
+</div>

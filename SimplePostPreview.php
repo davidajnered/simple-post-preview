@@ -1,10 +1,6 @@
 <?php
 /**
- * Plugin Name: Simple Post Preview
- * Version: 1.2.6
- * Plugin URI: http://www.davidajnered.com/
- * Description: Simple Post Preview is a widget that creates pushes for posts.
- * Author: David Ajnered
+ *
  */
 
 namespace SimplePostPreview;
@@ -14,12 +10,17 @@ class SimplePostPreview extends \WP_Widget
     /**
      * @var object
      */
-    private $template;
+    private $twig;
 
     /**
-     * @var object
+     * @var object ServiceProvider
      */
-    private $dbObjet;
+    private $serviceProvider;
+
+    /**
+     * @var string
+     */
+    private $relPath = 'wp-content/plugins/simple-post-preview';
 
     /**
      * Init method
@@ -29,29 +30,47 @@ class SimplePostPreview extends \WP_Widget
         parent::__construct(
             'simple_post_preview',
             'Simple Post Preview',
-            array('description' => 'Creates pushes for your posts')
+            array(
+                'description' => 'Creates pushes for your posts'
+            )
         );
 
-        $this->db = new db();
+        $this->serviceProvider = new ServiceProvider($this->relPath);
+        $this->twig = $this->serviceProvider->getTwigHelper()->getTwig();
 
-        $this->initTemplateEngine();
+        // Hook into wordpress
+        $this->addWordpressActions();
     }
 
     /**
-     * Instanciate temlate engine.
+     * Get unique id number assigned by wordpress.
+     *
+     * @return int
      */
-    private function initTemplateEngine()
+    private function getId()
     {
-        require_once ABSPATH . '/wp-content/plugins/simple-post-preview/lib/Twig/Autoloader.php';
-        \Twig_Autoloader::register();
+        return $this->number;
+    }
 
-        $loader = new \Twig_Loader_Filesystem(ABSPATH . '/wp-content/plugins/simple-post-preview/templates');
+    /**
+     * Add
+     */
+    private function addWordpressActions()
+    {
+        // Register widget
+        add_action('widgets_init', function () {
+            register_widget('SimplePostPreview\SimplePostPreview');
+        });
 
-        $args = array(
-            'cache' => ABSPATH . '/wp-content/plugins/simple-post-preview/templates/cache',
-        );
+        // Add scripts and css
+        $relPath = $this->relPath;
+        add_action('admin_head', function () use ($relPath) {
+            wp_enqueue_style('chosen', '/' . $relPath . '/lib/chosen/chosen.css');
+            wp_enqueue_script('chosen', '/' . $relPath . '/lib/chosen/chosen.jquery.min.js', array('jquery'));
 
-        $this->template = new \Twig_Environment($loader, $args);
+            wp_enqueue_style('simple_post_preview', '/' . $relPath . '/css/style.css');
+            wp_enqueue_script('simple_post_preview', '/' . $relPath . '/js/script.js', array('jquery'));
+        });
     }
 
     /**
@@ -62,9 +81,7 @@ class SimplePostPreview extends \WP_Widget
      */
     public function widget($args, $instance)
     {
-        $this->template->loadTemplate('widget.html');
-
-        $widget = new Widget($instance);
+        $widget = new WidgetInstance($instance, $this->getId());
         $type = $widget->getType();
 
         if (!empty($instance)) {
@@ -102,26 +119,19 @@ class SimplePostPreview extends \WP_Widget
         // Print to view
         include('includes/view.php');
 
+        // $this->template->loadTemplate('widget.html');
         // echo $this->template->render(array('name' => 'David'));
     }
 
     /**
      * Saves the widget settings
      */
-    public function update($new_instance, $old_instance)
+    public function update($newInstance, $oldInstance)
     {
-        $thumb = strip_tags(stripslashes($new_instance['thumbnail']));
-        $instance = $old_instance;
-        $instance['title'] = strip_tags(stripslashes($new_instance['title']));
-        $instance['item'] = strip_tags(stripslashes($new_instance['item']));
-        $instance['thumbnail'] = $thumb != 'checked' ? false : true;
-        $instance['thumbnail_size'] = strip_tags(stripslashes($new_instance['thumbnail_size']));
-        $instance['data_to_use'] = strip_tags(stripslashes($new_instance['data_to_use']));
-        $instance['length'] = strip_tags(stripslashes($new_instance['length']));
-        $instance['link'] = strip_tags(stripslashes($new_instance['link']));
-        $instance['link_to'] = strip_tags(stripslashes($new_instance['link_to']));
+        $widgetInstance = new WidgetInstance($this->serviceProvider->getDbObject(), $this->getId());
+        $widgetInstance->setData($newInstance);
 
-        return $instance;
+        return $widgetInstance->getData();
     }
 
     /**
@@ -129,36 +139,9 @@ class SimplePostPreview extends \WP_Widget
      */
     public function form($instance)
     {
-        $title = isset($instance['title']) ? htmlspecialchars($instance['title']) : '';
-        $item = isset($instance['item']) ? htmlspecialchars($instance['item']) : '';
-        $thumbnail = isset($instance['thumbnail']) ? htmlspecialchars($instance['thumbnail']) : '';
-        $thumbnail_size = isset($instance['thumbnail_size']) ? htmlspecialchars($instance['thumbnail_size']) : '';
-        $data_to_use = isset($instance['data_to_use']) ? htmlspecialchars($instance['data_to_use']) : '';
-        $length = isset($instance['length']) ? htmlspecialchars($instance['length']) : '';
-        $link = isset($instance['link']) ? htmlspecialchars($instance['link']) : '';
-        $link_to = isset($instance['link_to']) ? htmlspecialchars($instance['link_to']) : '';
+        $widgetInstance = new WidgetInstance($this->serviceProvider->getDbObject(), $this->getId());
+        $widgetInstance->setData($instance);
 
-        /* Print interface */
-        include('includes/interface.php');
+        echo $this->twig->render('admin.html', $widgetInstance->getTmplData());
     }
 }
-/* End of class */
-
-/**
- * Register Widget
- */
-function simple_post_preview_init()
-{
-    register_widget('SimplePostPreview\SimplePostPreview');
-}
-add_action('widgets_init', 'SimplePostPreview\simple_post_preview_init');
-
-/**
- * Add css and js to head
- */
-function simple_post_preview_css_and_scripts()
-{
-    wp_enqueue_style('simple_post_preview', '/wp-content/plugins/simple-post-preview/css/style.css');
-    wp_enqueue_script('simple_post_preview', '/wp-content/plugins/simple-post-preview/js/script.js', array('jquery'));
-}
-add_action('admin_head', 'SimplePostPreview\simple_post_preview_css_and_scripts');
