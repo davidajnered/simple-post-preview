@@ -15,12 +15,26 @@ class WidgetInstanceParent
     /**
      * @var array
      */
-    private $data = array();
+    private $attributes = array();
 
     /**
      * @var string
      */
     private $idBase = 'simple_post_preview';
+
+    /**
+     * @var array
+     */
+    private $fields = array(
+        'title',
+        'item_id',
+        'item_type',
+        'content_type',
+        'thumbnail_size',
+        'length',
+        'link',
+        'link_to'
+    );
 
     /**
      * Constructor.
@@ -30,7 +44,7 @@ class WidgetInstanceParent
     public function __construct(DbObject $dbObject, $id)
     {
         $this->dbObject = $dbObject;
-        $this->data['id'] = $id;
+        $this->attributes['id'] = $id;
     }
 
     /**
@@ -39,8 +53,9 @@ class WidgetInstanceParent
      * @param string $fieldName Field name
      * @return string Name attribute for $fieldName
      */
-    function getFieldName($fieldName) {
-        return 'widget-' . $this->idBase . '[' . $this->data['id'] . '][' . $fieldName . ']';
+    public function getFieldName($fieldName)
+    {
+        return 'widget-' . $this->idBase . '[' . $this->attributes['id'] . '][' . $fieldName . ']';
     }
 
     /**
@@ -49,40 +64,80 @@ class WidgetInstanceParent
      * @param string $fieldName Field name
      * @return string ID attribute for $fieldName
      */
-    function getFieldId($fieldName) {
-        return 'widget-' . $this->idBase . '-' . $this->data['id'] . '-' . $fieldName;
+    public function getFieldId($fieldName)
+    {
+        return 'widget-' . $this->idBase . '-' . $this->attributes['id'] . '-' . $fieldName;
     }
 
     /**
      *
      */
-    public function setData(array $data)
+    public function setAttribute($name, $value)
     {
-        foreach ($data as $name => $value) {
-            $function = 'set' . ucfirst($name);
-            $this->$function($value);
+        $function = 'set' . $this->getMethodNameFromAttribute($name);
+        $this->$function($value);
+    }
+
+    /**
+     *
+     */
+    public function setAttributes(array $attributes)
+    {
+        foreach ($this->fields as $name) {
+            $value = isset($attributes[$name]) ? $attributes[$name] : null;
+            $method = 'set' . $this->getMethodNameFromAttribute($name);
+            $this->$method($value);
+        }
+
+        if (isset($attributes['item'])) {
+            $this->setItem($attributes['item']);
         }
     }
 
-    public function getData()
+    /**
+     *
+     */
+    public function getAttributes()
     {
-        return $this->data;
+        return $this->attributes;
+    }
+
+    /**
+     * Todo: ugly! Find better way
+     */
+    private function getMethodNameFromAttribute($name)
+    {
+        $parts = explode('_', $name);
+        foreach ($parts as $key => $part) {
+            $parts[$key] = ucfirst($part);
+        }
+        $method = implode('', $parts);
+
+        return $method;
+    }
+
+    /**
+     *
+     */
+    private function getAttributeFromMethodName($method)
+    {
+        return strtolower(preg_replace('/\B([A-Z])/', '_$1', substr($method, 3)));
     }
 
     /**
      * Proxy set and get calls.
      */
-    public function __call($name, $arguments)
+    public function __call($method, $arguments)
     {
-        if (method_exists($this, $name)) {
-            call_user_func_array($name, $arguments);
+        if (method_exists($this, $method)) {
+            call_user_func_array($method, $arguments);
         } else {
-            $action = substr($name, 0, 3);
-            $name = lcfirst(substr($name, 3));
+            $action = substr($method, 0, 3);
+            $attributeName = $this->getAttributeFromMethodName($method);
             if ($action == 'set') {
-                $this->data[$name] = $arguments[0];
+                $this->attributes[$attributeName] = $arguments[0];
             } elseif ($action == 'get') {
-                return $this->data[$name];
+                return $this->attributes[$attributeName];
             }
         }
     }

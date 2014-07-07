@@ -81,46 +81,11 @@ class SimplePostPreview extends \WP_Widget
      */
     public function widget($args, $instance)
     {
-        $widget = new WidgetInstance($instance, $this->getId());
-        $type = $widget->getType();
+        $widgetInstance = new WidgetInstance($this->serviceProvider->getDbObject(), $this->getId());
+        $widgetInstance->setAttributes($instance);
 
-        if (!empty($instance)) {
-            include_once('includes/db_queries.php');
-            if ($category != 0) {
-                $data = spp_get_post('category', $category);
-                $data = $data[0];
-            } elseif ($post != 0) {
-                $data = spp_get_post('post', $post);
-                $data = $data[0];
-            } else {
-                // If no post or category is selected, use the most recent post.
-                $data = spp_get_post('post');
-                $data = $data[0];
-                if (!$data) {
-                    $title = "Simple Post Preview";
-                    $length = 100;
-                    $data = (object) array(
-                        'post_title' => 'Error!',
-                        'post_content' => 'This widget needs configuration',
-                    );
-                }
-            }
-        }
-
-        if ($data != null) {
-            // Set link url, post is default
-            $url = get_bloginfo('url');
-            $url .= ($link_to == 'Category') ? '?cat='.$data->term_id : '?p='.$data->ID;
-            $html_link = '<a href="';
-            $html_link .= $url;
-            $html_link .= '">'.$link.'</a>';
-        }
-
-        // Print to view
-        include('includes/view.php');
-
-        // $this->template->loadTemplate('widget.html');
-        // echo $this->template->render(array('name' => 'David'));
+        $tmplData = array_merge($args, $widgetInstance->getTmplData());
+        echo $this->twig->render('widget.html', $tmplData);
     }
 
     /**
@@ -129,9 +94,9 @@ class SimplePostPreview extends \WP_Widget
     public function update($newInstance, $oldInstance)
     {
         $widgetInstance = new WidgetInstance($this->serviceProvider->getDbObject(), $this->getId());
-        $widgetInstance->setData($newInstance);
+        $widgetInstance->setAttributes($newInstance);
 
-        return $widgetInstance->getData();
+        return $widgetInstance->getAttributes();
     }
 
     /**
@@ -140,8 +105,8 @@ class SimplePostPreview extends \WP_Widget
     public function form($instance)
     {
         $widgetInstance = new WidgetInstance($this->serviceProvider->getDbObject(), $this->getId());
-        $widgetInstance->setData($instance);
+        $widgetInstance->setAttributes($instance);
 
-        echo $this->twig->render('admin.html', $widgetInstance->getTmplData());
+        echo $this->twig->render('admin.html', $widgetInstance->getAdminTmplData());
     }
 }

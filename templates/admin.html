@@ -1,43 +1,56 @@
 <div class="simple-post-preview">
     <p>
-        <label for="{{title_id}}">Title:</label><br>
-        <input id="{{title_id}}" name="{{title_name}}" type="text" value="{{title}}"/>
+        <label for="{{title_form_id}}">Title:</label>
+        <input id="{{title_form_id}}" name="{{title_form_name}}" type="text" value="{{title}}"/>
         <small>If empty the posts title will be used</small>
     </p>
 
     <p>
-        <label for="item">Select a post or category:</label><br>
-        <select id="item" class="chosen-select" name="item" id="{{ item_id }}" data-placeholder="Select a post or category...">
-            {% for category in categories %}
-                <option value="c-{{category.id}}">{{category.name}} (category)</option>
-            {% endfor %}
+        <label for="{{item_form_id}}">Select a post or category:</label>
+        <select id="{{item_form_id}}" class="chosen-select" name="{{item_form_name}}" data-placeholder="Select a post or category...">
             {% for post in posts %}
-                <option value="p-{{post.id}}">{{post.name}} ({{post.type}})</option>
+                <option value="post:{{post.id}}"
+                    {% if item_type == 'post' %}
+                        {% if item_id == post.id %}
+                            selected
+                        {% endif %}
+                    {% endif %}
+                >{{post.name}} ({{post.type}})</option>
+            {% endfor %}
+            {% for category in categories %}
+                <option value="category:{{category.id}}"
+                    {% if item_type == 'category' %}
+                        {% if item_id == category.id %}
+                            selected
+                        {% endif %}
+                    {% endif %}
+                >{{category.name}} (category)</option>
             {% endfor %}
         </select>
     </p>
 
     <p>
         Use:
-        <input id="spp-data-to-use-content" name="{{data_to_use_name}}" type="radio" value="content">
-        <label for="spp-data-to-use-content">content</label>
-        <input id="spp-data-to-use-excerpt" name="{{data_to_use_name}}" type="radio" value="excerpt">
-        <label for="spp-data-to-use-excerpt">excerpt</label>
+        <input id="content-body" name="{{content_type_form_name}}" type="radio" value="body"{% if content_type == 'body' %} checked{% endif %}>
+        <label for="content-body">content</label>
+        <input id="content-excerpt" name="{{content_type_form_name}}" type="radio" value="excerpt"{% if content_type == 'excerpt' %} checked{% endif %}>
+        <label for="content-excerpt">excerpt</label>
     </p>
 
     <div class="spp-thumbnail">
         <div class="spp-thumbnail-wrapper">
             <p>
-                <input id="{{thumbnail_id}}" class="spp_thumbnail_checkbox" name="{{thumbnail_name}}" type="checkbox" value="checked">
-                <label for="{{thumbnail_id}}">Show thumbnail in push</label>
+                <input id="thumbnail-action" type="checkbox"{% if thumbnail_size %} checked{% endif %}>
+                <label for="thumbnail-action">Show thumbnail in push</label>
             </p>
 
             <p class="spp_thumbnail_dropdown_wrapper">
-                <label for="{{thumbnail_size_id}}">Select thumbnail size:</label>
-                <br>
-                <select name="{{thumbnail_size_name}}" id="{{thumbnail_size_id}}">
+                <label for="{{thumbnail_size_form_id}}">Select thumbnail size:</label>
+                <select name="{{thumbnail_size_form_name}}" id="{{thumbnail_size_form_id}}">
                     {% for size in thumbnail_sizes %}
-                        <option value="{{size.name}}">{{size.description}}</option>
+                        <option value="{{size.name}}"{% if size.name == thumbnail_size %} selected{% endif %}>
+                            {{size.description}}
+                        </option>
                     {% endfor %}
                 </select>
             </p>
@@ -45,24 +58,23 @@
     </div>
 
     <p>
-        <label for="{{length_id}}">Length in characters:</label>
-        <br>
-        <input id="{{length_id}}" name="{{length_name}}" type="text" value="{{length}}" />
+        <label for="{{length_form_id}}">Length in characters:</label>
+        <input id="{{length_form_id}}" name="{{length_form_name}}" type="text" value="{{length}}" />
         <small>-1 hides the content and 0 shows all</small>
     </p>
 
     <p>
-        <label for="{{link_id}}">Link title:</label>
-        <br>
-        <input id="{{link_id}}" name="{{link_name}}" type="text" value="{{link}}" />
+        <label for="{{link_form_id}}">Link title:</label>
+        <input id="{{link_form_id}}" name="{{link_form_name}}" type="text" value="{{link}}" />
     </p>
 
     <p>
-        <label for="{{link_to_id}}">Link to:</label>
-        <br>
-        <select name="{{link_to_name}}" id="{{link_to_id}}">
+        <label for="{{link_to_form_id}}">Link to:</label>
+        <select name="{{link_to_form_name}}" id="{{link_to_form_id}}">
             {% for option in link_options %}
-                <option value="{{option.value}}" >{{option.name}}</option>
+                <option value="{{option.value}}"{% if option.value == link_to %} selected{% endif %}>
+                    {{option.name}}
+                </option>
             {% endfor %}
         </select>
     </p>

@@ -4,7 +4,7 @@ jQuery(document).ready(function($) {
 
     initCheckbox();
 
-    $('.spp_thumbnail_checkbox').live('click', function() {
+    $('#thumbnail-action').live('click', function() {
         if($(this).is(':checked')) {
             $(this).parentsUntil('.spp-thumbnail').find('.spp_thumbnail_dropdown_wrapper').show();
         } else {
@@ -17,7 +17,7 @@ jQuery(document).ready(function($) {
     });
 
     function initCheckbox() {
-        $('.spp_thumbnail_checkbox').each(function(key, object) {
+        $('#thumbnail-action').each(function(key, object) {
             if($(object).is(':checked')) {
                 $(object).parentsUntil('.spp-thumbnail').find('.spp_thumbnail_dropdown_wrapper').show();
             } else {

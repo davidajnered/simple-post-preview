@@ -23,6 +23,7 @@ class TwigHelper
         $loader = new \Twig_Loader_Filesystem(ABSPATH . $relpath . '/templates');
 
         $args = array(
+            'autoescape' => false,
             // 'cache' => ABSPATH . $relpath . '/cache',
         );
 
