@@ -2,20 +2,26 @@
     {{before_title}}
         <a href="{{permalink}}">{{post_title}}</a>
     {{after_title}}
-    <a href="{{permalink}}">
-        <img src="{{image_url}}">
-    </a>
+
+    {% if show_image %}
+        <a href="{{permalink}}">
+            <img src="{{image_url}}">
+        </a>
+    {% endif %}
 
     <div class="content">
-        {{content}}
-        <a href="{{permalink}}">{{link}}</a>
+        {{content}}..
+        <a href="{{permalink}}">{{link_title}}</a>
     </div>
 
-    {% if link_to == 'category' %}
-        <ul>
-            {% for category in categories %}
-                <li><a href="{{category.url}}">{{category.name}}</a></li>
-            {% endfor %}
-        </ul>
+    {% if show_categories %}
+        <div class="categories">
+            <b>Categories</b>
+            <ul>
+                {% for category in categories %}
+                    <li><a href="{{category.url}}">{{category.name}}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
     {% endif %}
 {{after_widget}}

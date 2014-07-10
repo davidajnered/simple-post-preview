@@ -6,27 +6,8 @@
     </p>
 
     <p>
-        <label for="{{item_form_id}}">Select a post or category:</label>
-        <select id="{{item_form_id}}" class="chosen-select" name="{{item_form_name}}" data-placeholder="Select a post or category...">
-            {% for post in posts %}
-                <option value="post:{{post.id}}"
-                    {% if item_type == 'post' %}
-                        {% if item_id == post.id %}
-                            selected
-                        {% endif %}
-                    {% endif %}
-                >{{post.name}} ({{post.type}})</option>
-            {% endfor %}
-            {% for category in categories %}
-                <option value="category:{{category.id}}"
-                    {% if item_type == 'category' %}
-                        {% if item_id == category.id %}
-                            selected
-                        {% endif %}
-                    {% endif %}
-                >{{category.name}} (category)</option>
-            {% endfor %}
-        </select>
+        <label for="{{item_form_id}}">Select a post or category: </label>
+        <input type="hidden" name="{{item_form_name}}" id="{{item_form_id}}" class="select-select2" value="{{item_id}}" style="width:100%" />
     </p>
 
     <p>
@@ -37,14 +18,14 @@
         <label for="content-excerpt">excerpt</label>
     </p>
 
-    <div class="spp-thumbnail">
-        <div class="spp-thumbnail-wrapper">
+    <div class="thumbnail">
+        <div class="thumbnail-wrapper">
             <p>
-                <input id="thumbnail-action" type="checkbox"{% if thumbnail_size %} checked{% endif %}>
-                <label for="thumbnail-action">Show thumbnail in push</label>
+                <input id="{{thumbnail_switch_form_id}}" class="thumbnail-switch-action" name="{{thumbnail_switch_form_name}}" value="on" type="checkbox"{% if thumbnail_switch %} checked{% endif %}>
+                <label for="{{thumbnail_switch_form_id}}">Show thumbnail</label>
             </p>
 
-            <p class="spp_thumbnail_dropdown_wrapper">
+            <p class="thumbnail_dropdown_wrapper">
                 <label for="{{thumbnail_size_form_id}}">Select thumbnail size:</label>
                 <select name="{{thumbnail_size_form_name}}" id="{{thumbnail_size_form_id}}">
                     {% for size in thumbnail_sizes %}
@@ -64,18 +45,18 @@
     </p>
 
     <p>
-        <label for="{{link_form_id}}">Link title:</label>
-        <input id="{{link_form_id}}" name="{{link_form_name}}" type="text" value="{{link}}" />
+        <label for="{{link_title_form_id}}">Link title:</label>
+        <input id="{{link_title_form_id}}" name="{{link_title_form_name}}" type="text" value="{{link_title}}" />
     </p>
 
     <p>
-        <label for="{{link_to_form_id}}">Link to:</label>
-        <select name="{{link_to_form_name}}" id="{{link_to_form_id}}">
-            {% for option in link_options %}
-                <option value="{{option.value}}"{% if option.value == link_to %} selected{% endif %}>
-                    {{option.name}}
-                </option>
-            {% endfor %}
-        </select>
+        <input type="checkbox" name="{{show_categories_form_name}}" id="{{show_categories_form_id}}" value="on"{% if show_categories %} checked{% endif %}>
+        <label for="{{show_categories_form_id}}">Show categories</label>
+    </p>
+
+    <p>
+        <label for="{{template_form_id}}">Template:</label>
+        <input id="{{template_form_id}}" name="{{template_form_name}}" type="text" value="{{template}}" />
+        <small>The name of your custom template file (.html) located in your theme folder. </small>
     </p>
 </div>
