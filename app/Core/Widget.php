@@ -67,6 +67,7 @@ class Widget extends \WP_Widget
         });
 
         add_action('wp_ajax_spp_search_posts', array($this, 'searchPosts'));
+        add_filter('plugin_action_links', array($this, 'pluginLinks'));
     }
 
     /**
@@ -98,6 +99,26 @@ class Widget extends \WP_Widget
     }
 
     /**
+     * Add link to settings page on plugin page.
+     *
+     * @param array $links
+     * @return array
+     */
+    public function pluginLinks($links, $file = '')
+    {
+        static $linkAdded = false;
+        foreach ($links as $link) {
+            if (strpos($link, 'plugin=simple-post-preview') != false && $linkAdded == false) {
+                $links[] = '<a href="options-general.php?page=simple-post-preview.php">Settings</a>';
+                $linkAdded = true;
+                break;
+            }
+        }
+
+        return $links;
+    }
+
+    /**
      * Displays the widget
      *
      * @param $args
@@ -112,6 +133,12 @@ class Widget extends \WP_Widget
         // Check if user has own template
         $templateFile = '/wp-content/plugins/simple-post-preview/templates/widget.html';
         $userTemplateFile = $widgetInstance->getTemplate();
+
+        // Add .html if missing
+        if (substr($userTemplateFile, -5) != '.html') {
+            $userTemplateFile .= '.html';
+        }
+
         if ($userTemplateFile) {
             if (file_exists(get_template_directory() . '/' . $userTemplateFile)) {
                 $templateFile = str_replace(ABSPATH, '', get_template_directory()) . '/' . $userTemplateFile;
@@ -137,7 +164,6 @@ class Widget extends \WP_Widget
      */
     public function form($instance)
     {
-        error_log(var_export($instance, true));
         $widgetInstance = new Instance($this->serviceProvider->getDbService(), $this->getId());
         $widgetInstance->setAttributes($instance);
 

@@ -1,6 +1,12 @@
 {{before_widget}}
     {{before_title}}
-        <a href="{{permalink}}">{{post_title}}</a>
+        <a href="{{permalink}}">
+            {% if title != '' %}
+                {{title}}
+            {% else %}
+                {{post_title}}
+            {% endif %}
+        </a>
     {{after_title}}
 
     {% if show_image %}
@@ -10,7 +16,7 @@
     {% endif %}
 
     <div class="content">
-        {{content}}..
+        {{content}}{{excerpt_more}}
         <a href="{{permalink}}">{{link_title}}</a>
     </div>
 

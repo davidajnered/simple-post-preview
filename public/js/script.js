@@ -1,8 +1,12 @@
 jQuery(document).ready(function($) {
 
+    // Run some init functions
     setThumbnailSelectState();
     initSelect2();
 
+    /**
+     * Hide and show thumbnail select.
+     */
     $(document).on('click', '.thumbnail-switch-action', function() {
         if($(this).is(':checked')) {
             $(this).parentsUntil('.thumbnail').find('.thumbnail_dropdown_wrapper').show();
@@ -11,6 +15,9 @@ jQuery(document).ready(function($) {
         }
     });
 
+    /**
+     * Some logic for re-initializing select2 when widget is added and saved.
+     */
     $(document).ajaxSuccess(function(e, xhr, settings) {
         var settingsDataParts = decodeURI(settings.data).split('&'),
             settingsData = [];
@@ -38,20 +45,17 @@ jQuery(document).ready(function($) {
     });
 
     /**
-     *
+     * Init select2.
      */
     function initSelect2(selector)
     {
         var selector = (selector != undefined) ? selector : '.widget .simple-post-preview';
         selector += ' .select-select2';
 
-        console.log(selector);
-
         $(selector).select2('destroy');
 
         $(selector).select2({
             placeholder: 'Search for posts',
-            minimumInputLength: 2,
             ajax: {
                 url: ajaxurl,
                 dataType: 'json',
@@ -66,17 +70,18 @@ jQuery(document).ready(function($) {
                 }
             },
             initSelection: function(element, callback) {
-                var data = {
+                var selectedId = $(element).val().split(':').pop();
+                var ajaxData = {
                     'action': 'spp_search_posts',
-                    'selected': $(element).val()
+                    'selected': selectedId
                 };
 
                 $.ajax({
                     url: ajaxurl,
-                    data: data,
+                    data: ajaxData,
                     dataType: 'json',
                     success: function(data) {
-                        callback(data);
+                        callback(data[0]);
                     }
                 });
             }

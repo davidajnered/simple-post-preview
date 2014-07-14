@@ -2,17 +2,17 @@
     <p>
         <label for="{{title_form_id}}">Title:</label>
         <input id="{{title_form_id}}" name="{{title_form_name}}" type="text" value="{{title}}"/>
-        <small>If empty the posts title will be used</small>
+        <small>Posts title will be used if field is left empty.</small>
     </p>
 
     <p>
-        <label for="{{item_form_id}}">Select a post or category: </label>
-        <input type="hidden" name="{{item_form_name}}" id="{{item_form_id}}" class="select-select2" value="{{item_id}}" style="width:100%" />
+        <label for="{{item_form_id}}">Select a post or category:</label>
+        <input type="hidden" name="{{item_form_name}}" id="{{item_form_id}}" class="select-select2" value="{{item_type}}:{{item_id}}" style="width:100%" />
     </p>
 
     <p>
         Use:
-        <input id="content-body" name="{{content_type_form_name}}" type="radio" value="body"{% if content_type == 'body' %} checked{% endif %}>
+        <input id="content-body" name="{{content_type_form_name}}" type="radio" value="body"{% if content_type != 'excerpt' %} checked{% endif %}>
         <label for="content-body">content</label>
         <input id="content-excerpt" name="{{content_type_form_name}}" type="radio" value="excerpt"{% if content_type == 'excerpt' %} checked{% endif %}>
         <label for="content-excerpt">excerpt</label>
@@ -41,7 +41,7 @@
     <p>
         <label for="{{length_form_id}}">Length in characters:</label>
         <input id="{{length_form_id}}" name="{{length_form_name}}" type="text" value="{{length}}" />
-        <small>-1 hides the content and 0 shows all</small>
+        <small>Shows whole sentences so this value is an approximation.<br>-1 hides the content and 0 shows all.</small>
     </p>
 
     <p>

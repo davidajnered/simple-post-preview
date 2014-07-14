@@ -31,9 +31,6 @@ class Instance extends InstanceParent
         $itemId = $this->getItemId();
         $itemType = $this->getItemType();
 
-        error_log($itemId);
-        error_log($itemType);
-
         if (empty($itemId) || empty($itemType)) {
             return array();
         }
@@ -98,6 +95,8 @@ class Instance extends InstanceParent
                 }
             }
         }
+
+        $tmplData['excerpt_more'] = '';
 
         // Trigger action
         $customTmplData = do_action('simple_post_preview_tmpl_data', $tmplData);

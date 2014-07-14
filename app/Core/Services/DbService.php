@@ -10,7 +10,7 @@ class DbService
      * Todo: Get from settings page
      * @var array
      */
-    private $postTypes = array('post', 'articles');
+    private $postTypes = array('post');
 
     /**
      * @var string
@@ -28,6 +28,8 @@ class DbService
     public function __construct(array $options = array())
     {
         global $wpdb;
+
+        $this->postTypes = get_option('simple-post-preview_post_types');
 
         if (isset($options['post_types']) && is_array($options['post_types'])) {
             $this->postTypes = $options['post_types'];
@@ -49,21 +51,27 @@ class DbService
     {
         global $wpdb;
 
-        $performSearch = false;
-        if (isset($options['search']) && !empty($options['search'])) {
-            $performSearch = true;
-        }
+        $performSearch = (isset($options['search']) && $options['search']) ? true : false;
+        $includeSelected = (isset($options['selected']) && $options['selected'] && is_numeric($options['selected'])) ? true : false;
 
         // Build query
-        $query = "SELECT ID, post_title, post_type FROM {$wpdb->posts} WHERE post_status = 'publish'";
+        $query = "
+            SELECT ID, post_title, post_type
+            FROM {$wpdb->posts}
+            WHERE post_status = 'publish'
+            AND post_type IN ('" . implode("','", $this->postTypes) ."')
+        ";
 
+        // Search
         if ($performSearch) {
             $query .= " AND post_title LIKE '%" . $options['search'] . "%'";
+        } elseif ($includeSelected) {
+            $query .= " AND ID = " . $options['selected'];
         }
 
-        $query .= " ORDER BY post_date ASC";
+        $query .= " ORDER BY post_date DESC";
 
-        // If search, show all results
+        // Show all results when search is performed
         if (!$performSearch) {
             $query .= " LIMIT 10;";
         }

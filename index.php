@@ -36,3 +36,7 @@ spl_autoload_register(function ($className) {
 
 // Alright, let's get started!
 $simplePostPreview = new Core\Widget();
+
+if (is_admin()) {
+    new Admin\SettingsPage();
+}
