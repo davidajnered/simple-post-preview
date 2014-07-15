@@ -56,14 +56,14 @@ $tmplData = array (
     'post_modified_gmt' => '2014-07-15 08:17:49',
     'post_content_filtered' => '',
     'post_parent' => 0,
-    'guid' => 'http://lantbruk-wp.dev/?p=5919',
+    'guid' => 'http://your-site.dev/?p=5919',
     'menu_order' => 0,
     'post_type' => 'post',
     'post_mime_type' => '',
     'comment_count' => '0',
     'filter' => 'raw',
     'content' => 'Lorem ipsum dolor sit amet...',
-    'permalink' => 'http://lantbruk-wp.dev/this-is-simple-post-preview/',
+    'permalink' => 'http://your-site.dev/this-is-simple-post-preview/',
     'categories' =>
     array (
         0 => array (
@@ -128,14 +128,14 @@ $tmplData = array (
             'shutter_speed' => 0,
             'title' => '',
         ),
-        'thumbnail_url' => 'http://lantbruk-wp.dev/wp-content/uploads/2014/07/screenshot-1-80x80.png',
-        'medium_url' => 'http://lantbruk-wp.dev/wp-content/uploads/2014/07/screenshot-1-143x300.png',
-        'large_url' => 'http://lantbruk-wp.dev/wp-content/uploads/2014/07/screenshot-1.png',
-        'post-thumbnail_url' => 'http://lantbruk-wp.dev/wp-content/uploads/2014/07/screenshot-1-327x372.png',
-        'twentyfourteen-full-width_url' => 'http://lantbruk-wp.dev/wp-content/uploads/2014/07/screenshot-1-327x576.png',
+        'thumbnail_url' => 'http://your-site.dev/wp-content/uploads/2014/07/screenshot-1-80x80.png',
+        'medium_url' => 'http://your-site.dev/wp-content/uploads/2014/07/screenshot-1-143x300.png',
+        'large_url' => 'http://your-site.dev/wp-content/uploads/2014/07/screenshot-1.png',
+        'post-thumbnail_url' => 'http://your-site.dev/wp-content/uploads/2014/07/screenshot-1-327x372.png',
+        'twentyfourteen-full-width_url' => 'http://your-site.dev/wp-content/uploads/2014/07/screenshot-1-327x576.png',
     ),
     'show_image' => true,
-    'image_url' => 'http://lantbruk-wp.dev/wp-content/uploads/2014/07/screenshot-1-143x300.png',
+    'image_url' => 'http://your-site.dev/wp-content/uploads/2014/07/screenshot-1-143x300.png',
     'excerpt_more' => ''
 );
 `
