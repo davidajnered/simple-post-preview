@@ -153,6 +153,7 @@ Cheers / David
 ## Changelog
 
 ### 2.0
+* **Important: 2.0 is not backward compatible!**
 * Rewritten from scratch
 * Plugin is now OOP
 * Use your own custom templates
