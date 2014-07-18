@@ -13,16 +13,6 @@ class DbService
     private $postTypes = array('post');
 
     /**
-     * @var string
-     */
-    private $cachePath;
-
-    /**
-     * @var bool
-     */
-    private $errorHasBeenShown = false;
-
-    /**
      * Constructor.
      */
     public function __construct(array $options = array())
@@ -33,14 +23,6 @@ class DbService
 
         if (isset($options['post_types']) && is_array($options['post_types'])) {
             $this->postTypes = $options['post_types'];
-        }
-
-        if (isset($options['cache_path'])) {
-            $this->cachePath = $options['cache_path'];
-        }
-
-        if (!file_exists($this->cachePath)) {
-            add_action('admin_notices', array($this, 'showCachePathError'));
         }
     }
 
@@ -111,98 +93,5 @@ class DbService
         }
 
         return $sizes;
-    }
-
-    /**
-     * Save cache.
-     *
-     * @param string $key
-     * @param mixed $data
-     */
-    private function setCache($key, $data)
-    {
-        // Abort if cache path is not set
-        if (!$this->cachePath) {
-            return;
-        }
-
-        $filename = $this->cachePath . '/cache-' . $key;
-        if (file_exists($filename)) {
-            $this->clearCache($key);
-        }
-
-        @file_put_contents($filename, serialize($data));
-    }
-
-    /**
-     * Load cache.
-     *
-     * @param string $key
-     * @return $cache
-     */
-    private function loadCache($key)
-    {
-        // Abort if cache path is not set
-        if (!$this->cachePath) {
-            return;
-        }
-
-        $filename = $this->cachePath . '/cache-' . $key;
-        if (file_exists($filename)) {
-            $cache = unserialize(file_get_contents($filename));
-            return $cache;
-        }
-    }
-
-    /**
-     * Delete specific cache file.
-     *
-     * @param string $key
-     */
-    public function clearCache($key)
-    {
-        // Abort if cache path is not set
-        if (!$this->cachePath) {
-            return;
-        }
-
-        $filename = $this->cachePath . '/cache-' . $key;
-        if (file_exists($filename)) {
-            unlink($filename);
-        }
-    }
-
-    /**
-     * Delete all cache files.
-     */
-    public function clearAllCache()
-    {
-        if (!$this->cachePath) {
-            return;
-        }
-
-        $files = glob($this->cachePath . '/*');
-        foreach ($files as $file) {
-            if (is_file($file)) {
-                unlink($file);
-            }
-        }
-    }
-
-    /**
-     * Show admin error if there's a problem with the cache path.
-     */
-    public function showCachePathError() {
-        if (!$this->errorHasBeenShown) {
-            $output = '
-                <div class="error">
-                    <p><b>Simple Post Preview</b>: cache file could not be created in <b>/wp-content/uploads/cache</b>.</p>
-                </div>
-            ';
-
-            echo $output;
-
-            $this->errorHasBeenShown = true;
-        }
     }
 }

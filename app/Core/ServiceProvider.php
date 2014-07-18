@@ -21,7 +21,7 @@ class ServiceProvider
      */
     private function __construct()
     {
-        $this->services['dbService'] = new DbService(array('cache_path' => ABSPATH . 'wp-content/uploads/cache'));
+        $this->services['dbService'] = new DbService();
         $this->services['twigHelper'] = new TwigService();
     }
 
