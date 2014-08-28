@@ -6,6 +6,9 @@ Simple Post Preview is a widget that creates pushes for your posts.
 
 Simple Post Preview can create two kinds of pushes. The first is a static push for any post or page. The second one is for categories where the widget automatically shows the latest post in a category.
 
+# Set it up
+Not really a lot to do here except select the content types you want the plugin to work with on the Simple Post Preview settings page.
+
 ## Customization
 
 The GUI of this plugin is pretty straight forward so I just right to the more interesting parts. As of version 2.0 I've implemented Twig as template engine and added the feature for designers and developers to use their own templates with Simple Post Preview. In every widget you have a field to add then name of your html template file in the root of your theme folder. Below is an array of all the variables available in the template. If you're not sure how to use Twig, have a look at [this introduction page](http://twig.sensiolabs.org/doc/templates.html).
