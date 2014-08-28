@@ -4,7 +4,7 @@ Donate link: http://www.davidajnered.com/
 Tags: simple, post, preview, post preview, post, page, category, custom post types, push, widget, promote, excerpt, static, sticky, dynamic, api, twig
 Requires at least: 3.8
 Tested up to: 3.9
-Stable tag: 2.0
+Stable tag: 1.2.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,7 +14,9 @@ Simple Post Preview is a widget that creates pushes for your posts.
 
 Simple Post Preview can create two kinds of pushes. The first is a static push for any post or page. The second one is for categories where the widget automatically shows the latest post in a category.
 
-The GUI of this plugin is pretty straight forward so I just right to the more interesting parts. As of version 2.0 I've implemented Twig as template engine and added the feature for designers and developers to use their own templates with Simple Post Preview. Below is an array of all the variables available in the template.
+== Customization ==
+
+The GUI of this plugin is pretty straight forward so I just right to the more interesting parts. As of version 2.0 I've implemented Twig as template engine and added the feature for designers and developers to use their own templates with Simple Post Preview. In every widget you have a field to add then name of your html template file in the root of your theme folder. Below is an array of all the variables available in the template. If you're not sure how to use Twig, have a look at [this introduction page](http://twig.sensiolabs.org/doc/templates.html).
 
 `
 $tmplData = array (

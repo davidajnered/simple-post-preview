@@ -10,7 +10,7 @@ class DbService
      * Todo: Get from settings page
      * @var array
      */
-    private $postTypes = array('post');
+    private $postTypes;
 
     /**
      * Constructor.
@@ -23,6 +23,8 @@ class DbService
 
         if (isset($options['post_types']) && is_array($options['post_types'])) {
             $this->postTypes = $options['post_types'];
+        } else {
+            $this->postTypes = array('post');
         }
     }
 
