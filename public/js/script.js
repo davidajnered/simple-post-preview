@@ -71,6 +71,11 @@ jQuery(document).ready(function($) {
             },
             initSelection: function(element, callback) {
                 var selectedId = $(element).val().split(':').pop();
+
+                if(!selectedId) {
+                    return;
+                }
+
                 var ajaxData = {
                     'action': 'spp_search_posts',
                     'selected': selectedId
